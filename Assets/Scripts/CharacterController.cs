@@ -33,6 +33,7 @@ public class CharacterController : MonoBehaviour
     [SerializeField] int health;
     [SerializeField] int maxHealth = 3;
     [SerializeField] float deathHeight;
+    [SerializeField] float deathAnimationDuration = 0.5f;
 
     // Parpadeo del sprite mientras dura la invulnerabilidad tras un golpe.
     const int BlinkCount = 3;
@@ -45,6 +46,7 @@ public class CharacterController : MonoBehaviour
     bool isGrounded;
     bool isHittable;
     bool isFacingRight;
+    bool isDead;
 
     /// <summary>True mientras el personaje mira a la derecha.</summary>
     public bool IsFacingRight => isFacingRight;
@@ -70,7 +72,7 @@ public class CharacterController : MonoBehaviour
         FaceMovementDirection(input);
         HandleActions();
 
-        if (transform.position.y < deathHeight)
+        if (transform.position.y < deathHeight && !isDead)
             Die();
     }
 
@@ -160,16 +162,26 @@ public class CharacterController : MonoBehaviour
     /// <summary>Aplica dano salvo que ya este muerto o en plena invulnerabilidad.</summary>
     public void GetHit(int amount)
     {
-        if (!isHittable || health <= 0)
+        if (!isHittable || isDead)
             return;
 
         health = Mathf.Max(health - amount, 0);
         HUDController.Refresh(health);
 
+        if (animator)
+            animator.SetTrigger("takeDamage");
+
         if (health <= 0)
-            Die();
+        {
+            isDead = true;
+            if (animator)
+                animator.SetBool("isDead", true);
+            StartCoroutine(DeathSequence());
+        }
         else
+        {
             StartCoroutine(StartInvulnerability());
+        }
     }
 
     /// <summary>Cura sin pasarse de la vida maxima.</summary>
@@ -200,6 +212,20 @@ public class CharacterController : MonoBehaviour
     /// <summary>Reinicia el nivel: al morir o al llegar a la meta.</summary>
     public void Die()
     {
+        if (isDead)
+            return;
+
+        isDead = true;
+        if (animator)
+            animator.SetBool("isDead", true);
+        StartCoroutine(DeathSequence());
+    }
+
+    IEnumerator DeathSequence()
+    {
+        rb.velocity = Vector2.zero;
+        rb.simulated = false;
+        yield return new WaitForSeconds(deathAnimationDuration);
         SceneManager.LoadScene(0);
     }
 
