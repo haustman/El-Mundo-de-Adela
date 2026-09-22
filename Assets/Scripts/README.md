@@ -1,6 +1,6 @@
 # Scripts
 
-Todos los scripts C# del juego (16 en total). Cada uno tiene una sola responsabilidad.
+Todos los scripts C# del juego (17 en total). Cada uno tiene una sola responsabilidad.
 
 ### Jugador
 - **CharacterController.cs** — Movimiento, salto, disparo, vida y animación del jugador. Maneja la secuencia de muerte con animación.
@@ -9,6 +9,7 @@ Todos los scripts C# del juego (16 en total). Cada uno tiene una sola responsabi
 ### Enemigos
 - **Enemy.cs** — Enemigo cuerpo a cuerpo. Patrulla y daña al tocar.
 - **EnemyShooter.cs** — Enemigo a distancia. Patrulla y dispara.
+- **Boss.cs** — Jefe: patrulla opcional, ataca al entrar en rango con animación de ataque.
 - **PatrolRoute.cs** — Lógica de patrulla reutilizable (interpolación entre puntos).
 
 ### Combate

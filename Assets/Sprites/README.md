@@ -16,6 +16,17 @@ Sprites del personaje, organizados por animación. Cada subcarpeta tiene los fra
 
 Los nombres de las carpetas deben coincidir con los nombres de los clips en `Animations/`.
 
+### Sprites/Boss/
+
+Sprites del jefe, organizados por animación (5 frames de 32x32 por acción):
+
+- **Attack/** — Ataque del jefe.
+- **Idle/** — Jefe parado.
+- **Run/** — Jefe corriendo.
+- **Walk/** — Jefe caminando.
+
+Los nombres deben coincidir con `BossIdle/Walk/Run/Attack.anim` en `Animations/`.
+
 ### Sprites/UI/
 
 Assets de interfaz de usuario:

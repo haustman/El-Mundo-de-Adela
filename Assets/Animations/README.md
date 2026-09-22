@@ -11,4 +11,12 @@ Clips de animación y Animator Controller del personaje.
 - **Danger.anim** — Recibir daño (3 frames, spritesheet).
 - **Death.anim** — Muerte (4 frames, spritesheet).
 
+### Boss
+
+- **Boss.controller** — Animator Controller del jefe. Parámetros: isMoving, isRunning (bool), attack (trigger). Estados: Idle, Walk, Run, Attack.
+- **BossIdle.anim** — Jefe parado (5 frames).
+- **BossWalk.anim** — Jefe caminando (5 frames).
+- **BossRun.anim** — Jefe corriendo (5 frames).
+- **BossAttack.anim** — Ataque del jefe (5 frames, sin loop).
+
 Todas las animaciones están comprimidas para optimizar memoria en móvil.

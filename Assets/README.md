@@ -8,8 +8,9 @@ Assets/
 ├── Prefab/        Prefabs de proyectiles
 ├── Resources/     Assets que se cargan desde código
 ├── Scenes/        Escenas (Menu + SampleScene)
-├── Scripts/       Código C# (16 scripts)
+├── Scripts/       Código C# (17 scripts)
 ├── Sprites/       Imágenes y spritesheets
+│   ├── Boss/        Sprites del jefe por animación
 │   ├── Character/   Sprite del jugador por animación
 │   └── UI/          Logo, botones, corazones
 ├── TextMesh Pro/  Importación estándar de TMP

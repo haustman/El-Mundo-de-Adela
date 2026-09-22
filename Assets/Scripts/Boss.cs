@@ -45,6 +45,7 @@ public class Boss : Damageable
         var target = FindPlayer();
         if (target)
         {
+            FacePlayer(target);
             TryAttack(target);
         }
         UpdateAnimator();
@@ -77,7 +78,8 @@ public class Boss : Damageable
             return;
 
         nextAttackTime = Time.time + attackCooldown;
-        animator.SetTrigger("attack");
+        if (animator)
+            animator.SetTrigger("attack");
         player.GetHit(damage);
     }
 
@@ -88,6 +90,20 @@ public class Boss : Damageable
 
         animator.SetBool("isMoving", canPatrol && Route.IsValid);
         animator.SetBool("isRunning", false);
+    }
+
+    void FacePlayer(CharacterController player)
+    {
+        if (!player)
+            return;
+
+        var toPlayer = player.transform.position.x - transform.position.x;
+        if (Mathf.Abs(toPlayer) < 0.01f)
+            return;
+
+        var shape = GetComponentInChildren<SpriteRenderer>();
+        if (shape)
+            shape.flipX = toPlayer < 0f;
     }
 
     void OnDrawGizmosSelected()

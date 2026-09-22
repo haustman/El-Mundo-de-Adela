@@ -82,8 +82,9 @@ Assets/
 ├── Prefab/         Prefabs de proyectiles (Bullet 1, Bullet 2, BulletEnemy)
 ├── Resources/      Assets cargados desde código (cielo.png)
 ├── Scenes/         Menu.unity + SampleScene.unity
-├── Scripts/        16 scripts C# (jugador, enemigos, HUD, menú, cámara)
+├── Scripts/        17 scripts C# (jugador, enemigos, jefe, HUD, menú, cámara)
 ├── Sprites/
+│   ├── Boss/       Sprites del jefe por animación
 │   ├── Character/  Sprites de Adela por animación
 │   ├── Projectile/ Arma.png (sprite del disparo)
 │   └── UI/         Logo, botones, corazones
