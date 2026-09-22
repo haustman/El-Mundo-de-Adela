@@ -1,13 +1,13 @@
 # Scripts
 
-Todos los scripts C# del juego. Cada uno tiene una sola responsabilidad.
+Todos los scripts C# del juego (16 en total). Cada uno tiene una sola responsabilidad.
 
 ### Jugador
-- **CharacterController.cs** — Movimiento, salto, disparo, vida y animación del jugador.
-- **CameraController.cs** — Sigue al jugador y carga el fondo del cielo.
+- **CharacterController.cs** — Movimiento, salto, disparo, vida y animación del jugador. Maneja la secuencia de muerte con animación.
+- **CameraController.cs** — Sigue al jugador, carga el fondo del cielo y aplica efecto parallax.
 
 ### Enemigos
-- **Enemy.cs** — Enemigo cuerpo a cuerpo. Patrulla por una ruta y daña al jugador al tocarlo.
+- **Enemy.cs** — Enemigo cuerpo a cuerpo. Patrulla y daña al tocar.
 - **EnemyShooter.cs** — Enemigo a distancia. Patrulla y dispara.
 - **PatrolRoute.cs** — Lógica de patrulla reutilizable (interpolación entre puntos).
 
@@ -22,6 +22,10 @@ Todos los scripts C# del juego. Cada uno tiene una sola responsabilidad.
 - **EnemyHUDController.cs** — Barra de vida de enemigos cuerpo a cuerpo.
 - **EnemyShooterHUDController.cs** — Barra de vida de enemigos a distancia.
 
+### Menú
+- **Menu.cs** — Lógica del menú principal (Jugar y Salir).
+- **MenuEffects.cs** — Efectos del menú: fade-in del logo con parpadeo, sombra en botones al hover, transición con fade a negro.
+
 ### Objetos
-- **Heart.cs** — Corazón recogible que cura al jugador.
+- **Heart.cs** — Corazón recolectable que cura al jugador.
 - **FinishPoint.cs** — Meta del nivel.

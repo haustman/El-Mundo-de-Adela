@@ -1,50 +1,63 @@
 # Unity 2D Platformer
 
-A tiny 2D platformer made with **Unity**. Run, jump, and bonk enemies while collecting hearts.
-Perfect as a starter template for a sidescroller.
-
-<p align="center">
-  <img src="Screenshots/Screenshot 1404-06-25 at 18.45.08.png" width="75%" alt="Snow level with Enemy">
-</p>
+Un juego 2D tipo platformer hecho con **Unity**. Corre, salta y derrota enemigos mientras recolectas corazones.
+Plantilla perfecta para un sidescroller.
 
 ## Features
-- Basic player controller (run / jump)
-- Simple enemy with health bar
-- Collectible hearts (health)
-- Multiple biomes (forest & snow) with a smooth transition
-- Clean Unity project structure (no custom packages required)
+- Control del jugador (correr / saltar / disparar)
+- Enemigos cuerpo a distancia con barra de vida
+- Corazones recolectables (vida)
+- Animaciones: idle, walk, run, jump, attack, danger, death
+- Pantalla de menú con logo animado y transición al juego
+- Fondo de cielo con efecto parallax
+- Optimizado para móvil y PC de bajos recursos
 
-<p align="center">
-  <img src="Screenshots/Screenshot 1404-06-25 at 18.31.10.png" width="80%" alt="Forest level with health pick‑up">
-</p>
+## Controles
+- **Mover:** Flechas ← →
+- **Saltar:** Espacio
+- **Correr:** Shift izquierdo
+- **Disparar:** Click izquierdo
+- **Reiniciar:** R
 
-## Controls
-- **Move:** **Arrow Keys**
-- **Jump:** `Space`
-- **Pause/Reset:** `R` 
-
-## Tech
-- **Engine:** Unity (2022.x+ recommended)
-- **Language:** C# (Assembly-CSharp)
-- **Render:** 2D URP not required
-
-## Project Structure
+## Estructura del Proyecto
 ```
 Assets/
-Packages/
-ProjectSettings/
-UserSettings/
+├── Animations/        Clips .anim + Character.controller
+├── Prefab/            Prefabs de proyectiles
+├── Resources/         Assets cargados desde código (cielo.png)
+├── Scenes/            Menu.unity (índice 0) + SampleScene.unity (índice 1)
+├── Scripts/           16 scripts C# organizados por categoría
+├── Sprites/
+│   ├── Character/     Sprite del jugador por animación
+│   │   ├── Attack/    5 frames
+│   │   ├── Danger/    Spritesheet de daño (3 frames)
+│   │   ├── Death/     Spritesheet de muerte (4 frames)
+│   │   ├── Idle/      4 frames
+│   │   ├── Jump/      7 frames
+│   │   ├── Run/       4 frames
+│   │   └── Walk/      4 frames
+│   └── UI/            Logo, botones, corazones
+├── TextMesh Pro/      Importación estándar de TMP
+└── Tiles/             Tilesets y paleta de tiles
+    ├── Terrain/       Tiles de terreno
+    ├── TilePalette/   Paleta para pintar
+    └── Tiles/         Assets de tile generados
 ```
 
-
 ## Getting Started
-1. **Clone**
+1. **Clonar**
    ```bash
    git clone https://github.com/Arash-ra03/Unity-2D-Platformer
    cd Unity-2D-Platformer
    ```
-2. **Open in Unity Hub** (2022 LTS or newer).  
-3. Open the sample scene: `Assets/Scenes/SampleScene.unity` .
+2. **Abrir en Unity Hub** (2022 LTS o superior)
+3. Abrir la escena: `Assets/Scenes/Menu.unity`
 4. **Play** ▶️
+
+## Escenas
+| Escena | Índice | Descripción |
+|--------|--------|-------------|
+| `Menu.unity` | 0 | Pantalla principal con logo, Jugar y Salir |
+| `SampleScene.unity` | 1 | Nivel de juego |
 
 ---

@@ -580,7 +580,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 283a865f98aecd644af11250f1105dec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 424b5a5a4ec50df449fbb4cee98bd1cd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1109,6 +1109,7 @@ MonoBehaviour:
   pulseSpeed: 0.6
   hoverScale: 1.12
   scaleSpeed: 8
+  shadowHover: {fileID: 0}
   shadowOffsetHover: {x: 3, y: -3}
   shadowOffsetNormal: {x: 0, y: 0}
   shadowSpeed: 10
