@@ -94,6 +94,52 @@ Assets/
 
 ---
 
+## Configuración vital (dónde modificar cada cosa)
+
+### Cámara — `Assets/Scenes/SampleScene.unity`, objeto **Main Camera**
+
+| Qué | Dónde | Valor actual |
+|---|---|---|
+| Zoom / encuadre (ortho size) | Inspector → Camera → **Orthographic Size** (o `SampleScene.unity` línea ~1271) | **6** (12 unidades de alto a la vista; menor = más zoom) |
+| Posición inicial | Transform del Main Camera | `(0, -0.53, -10)` — en runtime la sigue el script |
+| Sigue al jugador con desfase | `CameraController.offset` (Inspector del Main Camera) | **(2, 2)** → Adela queda en el tercio inferior-derecho |
+| Objetivo | `CameraController.target` | Transform del objeto **Character** |
+| Deriva del cielo | `CameraController` → `driftSpeed`, `driftRangeX/Y` | `0.3`, `5`, `0.8` |
+| Fondo del cielo | `Assets/Resources/cielo.png` (cargado por código) | reemplazar el PNG cambia el fondo |
+
+El script de cámara es `Assets/Scripts/CameraController.cs`: en `LateUpdate` coloca la cámara en `target.position + offset`, con `z = -10`.
+
+### Jugador — objeto **Character**, script `Assets/Scripts/CharacterController.cs`
+
+| Campo (Inspector) | Valor | Qué hace |
+|---|---|---|
+| `movementSpeed` | 10 | velocidad al caminar |
+| `runSpeedMultiplier` | 1.6 | multiplicador con Shift |
+| `jumpForce` | 20 | impulso del salto (velocidad inicial) |
+| `maxJumpCount` | 2 | salto simple + doble salto |
+| `groundDetectionRange` | 0.66 | longitud del raycast de suelo |
+| `health` / `maxHealth` | 3 | corazones |
+| `deathHeight` | -30 | por debajo de Y=-30 cuenta como caída al vacío |
+
+- **Gravedad del jugador**: componente `Rigidbody2D` del Character → **Gravity Scale = 5** (con jumpForce 20: sube ~4 unidades en ~0.4 s).
+- **Gravedad global**: `ProjectSettings/Physics2DSettings.asset` (`-9.81`).
+
+### Capas — `ProjectSettings/TagManager.asset`
+
+| Índice | Capa | Uso |
+|---|---|---|
+| 6 | Character | jugador (máscara de detección de enemigos/boss) |
+| 7 | Ground | tilemap; la máscara `groundMask` del jugador solo mira esta |
+| 8 | Enemy | enemigos |
+| 9 | Background | decoración de fondo |
+
+### Animator — `Assets/Animations/Character.controller`
+
+Parámetros (los pone `CharacterController.cs`): `isMoving`, `isRunning`, `isGrounded` (bool), `attack`, `takeDamage` (trigger), `isDead` (bool).
+Boss: `Assets/Animations/Boss.controller` con `isMoving`, `isRunning`, `attack` (los pone `Boss.cs`).
+
+---
+
 ## Cómo abrirlo
 
 1. Abrir el proyecto en **Unity Hub** (2022.3 LTS o superior).

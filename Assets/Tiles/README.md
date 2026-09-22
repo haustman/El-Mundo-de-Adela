@@ -6,6 +6,9 @@ Todo lo relacionado con tilemaps y tiles para el nivel.
 - **tilemap(18X18).png** — Tiles de terreno (tierra, hierba). 18×18 px por tile.
 - **tilemap-backgrounds(24X24).png** — Tiles de fondo (colores planos). 24×24 px.
 - **tilemap-characters(24X24).png** — Tiles de personajes y enemigos. 24×24 px.
+- **Elementos.png** — Pack de decoración (tierra/hierba, rocas, arbustos, flores, troncos, valla, estanque). 1254×1254 px, fondo transparente, celdas irregulares: requiere Slice manual/automático por transparencia en el Sprite Editor (no por grid).
+- **Fondo.png** — Fondo decorativo del menú/nivel.
+- **button ver 2 (785x271).png** — Hoja de botones de UI.
 
 ### Tiles/Terrain/
 
