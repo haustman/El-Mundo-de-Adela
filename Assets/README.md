@@ -12,6 +12,7 @@ Assets/
 ├── Sprites/       Imágenes y spritesheets
 │   ├── Boss/        Sprites del jefe por animación
 │   ├── Character/   Sprite del jugador por animación
+│   ├── Projectile/  Sprite del disparo (Arma.png)
 │   └── UI/          Logo, botones, corazones
 ├── TextMesh Pro/  Importación estándar de TMP
 └── Tiles/         Tiles, tilemaps y paleta

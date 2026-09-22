@@ -27,6 +27,10 @@ Sprites del jefe, organizados por animación (5 frames de 32x32 por acción):
 
 Los nombres deben coincidir con `BossIdle/Walk/Run/Attack.anim` en `Animations/`.
 
+### Sprites/Projectile/
+
+- **Arma.png** — Sprite del disparo del jugador (se usa en los prefabs `Bullet 1` / `Bullet 2`).
+
 ### Sprites/UI/
 
 Assets de interfaz de usuario:
