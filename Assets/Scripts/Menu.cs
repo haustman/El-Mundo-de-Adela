@@ -5,9 +5,19 @@ public class Menu : MonoBehaviour
 {
     [SerializeField] string gameSceneName = "SampleScene";
 
+    MenuEffects effects;
+
+    void Start()
+    {
+        effects = FindObjectOfType<MenuEffects>();
+    }
+
     public void Play()
     {
-        SceneManager.LoadScene(gameSceneName);
+        if (effects)
+            effects.StartTransition();
+        else
+            SceneManager.LoadScene(gameSceneName);
     }
 
     public void Quit()
