@@ -1,0 +1,100 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// Boss enemigo: patrulla opcional, ataca al jugador al entrar en rango.
+/// </summary>
+public class Boss : Damageable
+{
+    [SerializeField] bool canPatrol;
+    [SerializeField] List<PatrolMovement> patrolPositions;
+    [SerializeField] LayerMask characterLayer;
+    [SerializeField] float characterDetectionRange;
+    [SerializeField] float attackRange;
+    [SerializeField] int damage;
+    [SerializeField] float attackCooldown = 1f;
+    [SerializeField] EnemyHUDController HUD;
+
+    Animator animator;
+    PatrolRoute patrolRoute;
+    float nextAttackTime;
+
+    PatrolRoute Route => patrolRoute ??= new PatrolRoute(patrolPositions);
+
+    protected override void SetupHUD()
+    {
+        if (HUD)
+            HUD.Setup(this);
+    }
+
+    protected override void RefreshHUD()
+    {
+        if (HUD)
+            HUD.Repaint(this);
+    }
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        EnsureReady();
+        Patrol();
+        var target = FindPlayer();
+        if (target)
+        {
+            TryAttack(target);
+        }
+        UpdateAnimator();
+    }
+
+    void Patrol()
+    {
+        if (!canPatrol || !Route.IsValid)
+            return;
+
+        transform.position = Route.Tick(Time.deltaTime);
+
+        if (Route.HasArrived(transform.position))
+            Route.Next();
+    }
+
+    CharacterController FindPlayer()
+    {
+        var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
+        return hit && hit.TryGetComponent<CharacterController>(out var player) ? player : null;
+    }
+
+    void TryAttack(CharacterController player)
+    {
+        if (Time.time < nextAttackTime)
+            return;
+
+        var distance = Vector2.Distance(transform.position, player.transform.position);
+        if (distance > attackRange)
+            return;
+
+        nextAttackTime = Time.time + attackCooldown;
+        animator.SetTrigger("attack");
+        player.GetHit(damage);
+    }
+
+    void UpdateAnimator()
+    {
+        if (!animator)
+            return;
+
+        animator.SetBool("isMoving", canPatrol && Route.IsValid);
+        animator.SetBool("isRunning", false);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireSphere(transform.position, characterDetectionRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+}
