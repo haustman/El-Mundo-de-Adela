@@ -12,9 +12,6 @@ public abstract class Damageable : MonoBehaviour
     bool isReady;
     bool isDead;
 
-    /// <summary>True cuando ya ha muerto.</summary>
-    public bool IsDead => isDead;
-
     /// <summary>
     /// Prepara la vida y la barra. Se llama solo, la primera vez que hace falta:
     /// asi no depende de Start y un recargue de ensamblado (editar un script en Play)

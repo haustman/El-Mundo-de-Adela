@@ -25,7 +25,6 @@ public class MenuEffects : MonoBehaviour
     [SerializeField] float scaleSpeed = 8f;
 
     [Header("Sombra botones")]
-    [SerializeField] Shadow shadowHover;
     [SerializeField] Vector2 shadowOffsetHover = new Vector2(3f, -3f);
     [SerializeField] Vector2 shadowOffsetNormal = Vector2.zero;
     [SerializeField] float shadowSpeed = 10f;
@@ -34,8 +33,6 @@ public class MenuEffects : MonoBehaviour
     [SerializeField] float transitionDuration = 0.8f;
 
     CanvasGroup logoGroup;
-    CanvasGroup jugarGroup;
-    CanvasGroup salirGroup;
 
     RectTransform jugarRect;
     RectTransform salirRect;
@@ -56,8 +53,8 @@ public class MenuEffects : MonoBehaviour
         if (!menu) return;
 
         logoGroup = SetupFade(menu.Find("Image"), logoFadeDuration, 0f);
-        jugarGroup = SetupFade(menu.Find("Jugar"), buttonFadeDuration, buttonDelay);
-        salirGroup = SetupFade(menu.Find("Salir"), buttonFadeDuration, buttonDelay + 0.3f);
+        SetupFade(menu.Find("Jugar"), buttonFadeDuration, buttonDelay);
+        SetupFade(menu.Find("Salir"), buttonFadeDuration, buttonDelay + 0.3f);
 
         jugarRect = menu.Find("Jugar")?.GetComponent<RectTransform>();
         salirRect = menu.Find("Salir")?.GetComponent<RectTransform>();

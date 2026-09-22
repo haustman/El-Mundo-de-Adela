@@ -2,20 +2,24 @@ using UnityEngine;
 
 /// <summary>
 /// Sigue al objetivo manteniendo el desplazamiento configurado.
-/// Crea el fondo de cielo con efecto parallax suave.
+/// Crea el fondo de cielo con una deriva suave para simular movimiento.
 /// </summary>
 public class CameraController : MonoBehaviour
 {
     [SerializeField] Vector2 offset;
     [SerializeField] Transform target;
 
-    [Header("Parallax del cielo")]
-    [SerializeField] float parallaxX = 0.15f;
-    [SerializeField] float parallaxY = 0.05f;
+    [Header("Deriva del cielo")]
+    [Tooltip("Velocidad del vaiven. Mas alto = se mueve mas rapido.")]
+    [SerializeField] float driftSpeed = 0.3f;
+    [Tooltip("Cuanto se desplaza el cielo a los lados, en unidades de mundo.")]
+    [SerializeField] float driftRangeX = 5f;
+    [Tooltip("Cuanto se desplaza el cielo arriba y abajo, en unidades de mundo.")]
+    [SerializeField] float driftRangeY = 0.8f;
 
     GameObject skyInstance;
-    Vector3 lastTargetPos;
     Vector3 skyBaseLocal;
+    float driftTime;
 
     void Awake()
     {
@@ -32,34 +36,36 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        if (target)
-            lastTargetPos = target.position;
-
         if (skyInstance)
             skyBaseLocal = skyInstance.transform.localPosition;
     }
 
     void LateUpdate()
     {
-        if (!target)
+        if (target)
+        {
+            var position = target.position;
+            position.x += offset.x;
+            position.y += offset.y;
+            position.z = -10f;
+            transform.position = position;
+        }
+
+        DriftSky();
+    }
+
+    /// <summary>Vaiven lento del cielo para que parezca que las nubes se mueven solas.</summary>
+    void DriftSky()
+    {
+        if (!skyInstance)
             return;
 
-        Vector3 delta = target.position - lastTargetPos;
-        lastTargetPos = target.position;
+        driftTime += Time.deltaTime;
 
-        var position = target.position;
-        position.x += offset.x;
-        position.y += offset.y;
-        position.z = -10f;
-        transform.position = position;
-
-        if (skyInstance)
-        {
-            Vector3 newLocal = skyBaseLocal;
-            newLocal.x += delta.x * parallaxX;
-            newLocal.y += delta.y * parallaxY;
-            skyInstance.transform.localPosition = newLocal;
-        }
+        var newLocal = skyBaseLocal;
+        newLocal.x += Mathf.Sin(driftTime * driftSpeed) * driftRangeX;
+        newLocal.y += Mathf.Sin(driftTime * driftSpeed * 0.6f) * driftRangeY;
+        skyInstance.transform.localPosition = newLocal;
     }
 
     void SetupSkyBackground()
@@ -80,8 +86,15 @@ public class CameraController : MonoBehaviour
         skyInstance = new GameObject("SkyBackground");
 
         skyInstance.transform.SetParent(transform);
-        skyInstance.transform.localPosition = Vector3.zero;
-        skyInstance.transform.localScale = Vector3.one * 6f;
+
+        // La camara esta en z = -10 y su near clip plane es 0.3: si el cielo queda
+        // en local z = 0 se solapa con la camara y el recorte lo oculta.
+        // Con local z = 10 el cielo cae en el mundo en z = 0, delante del recorte.
+        skyInstance.transform.localPosition = new Vector3(0f, 0f, 10f);
+
+        // El sprite mide 16.72 x 9.41 unidades. Con escala 3 (50 x 28) sobra margen
+        // para el vaiven sin descubrir los bordes ni en pantallas muy anchas.
+        skyInstance.transform.localScale = Vector3.one * 3f;
 
         var sr = skyInstance.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;

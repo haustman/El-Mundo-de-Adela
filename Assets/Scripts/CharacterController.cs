@@ -48,9 +48,6 @@ public class CharacterController : MonoBehaviour
     bool isFacingRight;
     bool isDead;
 
-    /// <summary>True mientras el personaje mira a la derecha.</summary>
-    public bool IsFacingRight => isFacingRight;
-
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
