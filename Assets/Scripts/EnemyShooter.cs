@@ -85,6 +85,7 @@ public class EnemyShooter : Damageable
     /// <summary>Espeja el sprite y cambia el sentido del disparo.</summary>
     void Flip()
     {
+        if (!shape) return;
         var scale = shape.transform.localScale;
         scale.x *= -1f;
         shape.transform.localScale = scale;

@@ -81,9 +81,12 @@ public class CharacterController : MonoBehaviour
         var isRunning = input != 0f && Input.GetKey(runKey);
         var speed = isRunning ? movementSpeed * runSpeedMultiplier : movementSpeed;
 
-        animator.SetBool("isMoving", input != 0f);
-        animator.SetBool("isRunning", isRunning);
-        animator.SetBool("isGrounded", isGrounded);
+        if (animator)
+        {
+            animator.SetBool("isMoving", input != 0f);
+            animator.SetBool("isRunning", isRunning);
+            animator.SetBool("isGrounded", isGrounded);
+        }
 
         var velocity = rb.velocity;
         velocity.x = input * speed;
@@ -144,7 +147,8 @@ public class CharacterController : MonoBehaviour
 
     void Shoot()
     {
-        animator.SetTrigger("attack");
+        if (animator)
+            animator.SetTrigger("attack");
 
         var prefab = isFacingRight ? projectilePrefabRight : projectilePrefabLeft;
         var projectile = Instantiate(prefab, transform.position, Quaternion.identity);
