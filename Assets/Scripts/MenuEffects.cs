@@ -113,6 +113,10 @@ public class MenuEffects : MonoBehaviour
 
     IEnumerator PulseLogo()
     {
+        // Espera a que acabe el fade-in: si el titileo arranca antes, pisa el alpha
+        // cada frame y el logo nunca llega a verse desvanecerse desde 0.
+        yield return new WaitForSecondsRealtime(logoFadeDuration);
+
         while (true)
         {
             float t = (Mathf.Sin(Time.unscaledTime * pulseSpeed * Mathf.PI * 2f) + 1f) * 0.5f;
@@ -173,8 +177,17 @@ public class MenuEffects : MonoBehaviour
 
     public void StartTransition()
     {
-        if (!transitioning)
-            StartCoroutine(TransitionToGame());
+        if (transitioning)
+            return;
+
+        // Sin overlay (por ejemplo si no se encontro el objeto "Menu") no hay fundido que hacer.
+        if (fadeOverlay == null)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+            return;
+        }
+
+        StartCoroutine(TransitionToGame());
     }
 
     IEnumerator TransitionToGame()

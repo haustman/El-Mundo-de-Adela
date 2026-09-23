@@ -41,11 +41,18 @@ public class PatrolRoute
     /// <summary>Hay ruta que recorrer.</summary>
     public bool IsValid => points.Count > 0;
 
+    /// <summary>Cuantos puntos tiene la ruta. Con menos de 2 no hay recorrido posible.</summary>
+    public int Count => points.Count;
+
     /// <summary>Avance (0 a 1) dentro del tramo actual.</summary>
     public float Progress
     {
         get
         {
+            // Ruta sin puntos: no hay tramo que medir (evita salirse de la lista).
+            if (points.Count == 0)
+                return 1f;
+
             var duration = durations[index];
             return duration <= 0f ? 1f : Mathf.Clamp01(elapsed / duration);
         }

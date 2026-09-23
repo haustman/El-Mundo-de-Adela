@@ -10,16 +10,24 @@ public class Heart : MonoBehaviour
     void Update()
     {
         TryPickUp();
+
+        // Giro sobre el eje Y: el corazon se estrecha y se ensancha como una moneda
+        // vista de frente, que es el clasico de los recogibles. Sobre Z pareceria
+        // una rueda rodando.
         transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
     }
 
     void TryPickUp()
     {
         var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
-        if (!hit || !hit.TryGetComponent<CharacterController>(out var player))
+        if (!hit || !hit.TryGetComponent<PlayerController>(out var player))
             return;
 
-        player.Heal(1);
+        // Si Adela ya esta al maximo de vida, el corazon se queda donde esta:
+        // no se gasta para no curar nada.
+        if (!player.Heal(1))
+            return;
+
         Destroy(gameObject);
     }
 }

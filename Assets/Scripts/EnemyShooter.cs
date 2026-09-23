@@ -56,7 +56,9 @@ public class EnemyShooter : Damageable
 
         hasShotThisLeg = false;
 
-        if (Route.Next())
+        // Con un solo punto no hay vuelta que cerrar: si no se comprueba,
+        // el enemigo dispararia y se giraria una vez por frame.
+        if (Route.Count > 1 && Route.Next())
         {
             Shoot();
             Flip();
@@ -95,7 +97,7 @@ public class EnemyShooter : Damageable
     void DamagePlayerInRange()
     {
         var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
-        if (hit && hit.TryGetComponent<CharacterController>(out var player))
+        if (hit && hit.TryGetComponent<PlayerController>(out var player))
             player.GetHit(damage);
     }
 

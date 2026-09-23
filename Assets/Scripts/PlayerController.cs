@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// Controla al jugador: movimiento, salto, disparo, vida y animacion.
 /// El personaje mira siempre hacia el lado en el que se mueve.
 /// </summary>
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] GameObject shape;
@@ -47,6 +47,9 @@ public class CharacterController : MonoBehaviour
     bool isHittable;
     bool isFacingRight;
     bool isDead;
+    bool isFinished;
+    Vector3 spawnPosition;
+    Coroutine blinkRoutine;
 
     void Awake()
     {
@@ -56,6 +59,7 @@ public class CharacterController : MonoBehaviour
 
     void Start()
     {
+        spawnPosition = transform.position;
         isHittable = true;
         SetFacing(true);
     }
@@ -70,7 +74,7 @@ public class CharacterController : MonoBehaviour
         HandleActions();
 
         if (transform.position.y < deathHeight && !isDead)
-            Die();
+            FallIntoVoid();
     }
 
     // ---------------------------------------------------------------- movimiento
@@ -159,7 +163,16 @@ public class CharacterController : MonoBehaviour
     /// <summary>Aplica dano salvo que ya este muerto o en plena invulnerabilidad.</summary>
     public void GetHit(int amount)
     {
-        if (!isHittable || isDead)
+        ApplyDamage(amount, respectInvulnerability: true);
+    }
+
+    /// <summary>Resta vida y refresca el HUD. Al llegar a 0 vidas, muere.</summary>
+    void ApplyDamage(int amount, bool respectInvulnerability)
+    {
+        if (isDead)
+            return;
+
+        if (respectInvulnerability && !isHittable)
             return;
 
         health = Mathf.Max(health - amount, 0);
@@ -170,25 +183,22 @@ public class CharacterController : MonoBehaviour
 
         if (health <= 0)
         {
-            isDead = true;
-            if (animator)
-                animator.SetBool("isDead", true);
-            StartCoroutine(DeathSequence());
+            Die();
+            return;
         }
-        else
-        {
-            StartCoroutine(StartInvulnerability());
-        }
+
+        StartBlink();
     }
 
-    /// <summary>Cura sin pasarse de la vida maxima.</summary>
-    public void Heal(int amount)
+    /// <summary>Cura sin pasarse de la vida maxima. Devuelve true si ha curado de verdad.</summary>
+    public bool Heal(int amount)
     {
         if (health <= 0 || health >= maxHealth)
-            return;
+            return false;
 
         health = Mathf.Min(health + amount, maxHealth);
         HUDController.Refresh(health);
+        return true;
     }
 
     IEnumerator StartInvulnerability()
@@ -204,14 +214,46 @@ public class CharacterController : MonoBehaviour
         }
 
         isHittable = true;
+        blinkRoutine = null;
     }
 
-    /// <summary>Reinicia el nivel: al morir o al llegar a la meta.</summary>
+    /// <summary>Arranca el parpadeo; si ya habia uno en marcha lo reinicia limpiamente.</summary>
+    void StartBlink()
+    {
+        StopBlink();
+        blinkRoutine = StartCoroutine(StartInvulnerability());
+    }
+
+    /// <summary>Detiene el parpadeo dejando el sprite visible.</summary>
+    void StopBlink()
+    {
+        if (blinkRoutine == null)
+            return;
+
+        StopCoroutine(blinkRoutine);
+        blinkRoutine = null;
+        shape.SetActive(true);
+    }
+
+    /// <summary>Caer al vacio: resta 1 vida y reaparece en el punto de inicio. Al llegar a 0 vidas, muere.</summary>
+    void FallIntoVoid()
+    {
+        ApplyDamage(1, respectInvulnerability: false);
+
+        if (isDead)
+            return;
+
+        transform.position = spawnPosition;
+        rb.velocity = Vector2.zero;
+    }
+
+    /// <summary>Muerte: animacion y vuelta al menu.</summary>
     public void Die()
     {
         if (isDead)
             return;
 
+        StopBlink();
         isDead = true;
         if (animator)
             animator.SetBool("isDead", true);
@@ -224,6 +266,18 @@ public class CharacterController : MonoBehaviour
         rb.simulated = false;
         yield return new WaitForSeconds(deathAnimationDuration);
         SceneManager.LoadScene(0);
+    }
+
+    /// <summary>Llega a la meta: se acaba el nivel y vuelve a empezar.</summary>
+    public void Finish()
+    {
+        if (isDead || isFinished)
+            return;
+
+        isFinished = true;
+        StopBlink();
+        rb.velocity = Vector2.zero;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     void OnDrawGizmos()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/// <summary>Meta del nivel: al tocarla el jugador reinicia la escena.</summary>
+/// <summary>Meta del nivel: al tocarla el jugador termina el nivel y este vuelve a empezar.</summary>
 public class FinishPoint : MonoBehaviour
 {
     [SerializeField] LayerMask characterLayer;
@@ -9,10 +9,10 @@ public class FinishPoint : MonoBehaviour
     void Update()
     {
         var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
-        if (!hit || !hit.TryGetComponent<CharacterController>(out var player))
+        if (!hit || !hit.TryGetComponent<PlayerController>(out var player))
             return;
 
-        player.Die();
+        player.Finish();
         Destroy(gameObject);
     }
 }

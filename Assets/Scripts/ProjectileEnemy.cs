@@ -44,7 +44,7 @@ public class ProjectileEnemy : MonoBehaviour
         if (!hit)
             return false;
 
-        if (hit.TryGetComponent<CharacterController>(out var player))
+        if (hit.TryGetComponent<PlayerController>(out var player))
             player.GetHit(damage);
 
         Die();

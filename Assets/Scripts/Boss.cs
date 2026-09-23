@@ -62,13 +62,13 @@ public class Boss : Damageable
             Route.Next();
     }
 
-    CharacterController FindPlayer()
+    PlayerController FindPlayer()
     {
         var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
-        return hit && hit.TryGetComponent<CharacterController>(out var player) ? player : null;
+        return hit && hit.TryGetComponent<PlayerController>(out var player) ? player : null;
     }
 
-    void TryAttack(CharacterController player)
+    void TryAttack(PlayerController player)
     {
         if (Time.time < nextAttackTime)
             return;
@@ -92,7 +92,7 @@ public class Boss : Damageable
         animator.SetBool("isRunning", false);
     }
 
-    void FacePlayer(CharacterController player)
+    void FacePlayer(PlayerController player)
     {
         if (!player)
             return;

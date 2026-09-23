@@ -17,7 +17,13 @@ Tiles individuales del terreno recortados del spritesheet. Cada `.asset` es un t
 
 ### Tiles/Tiles/
 
-Los assets de tile generados para cada sprite. El nombre sigue el patrón `spritesheet_N.asset` donde N es el índice.
+Los assets de tile generados para cada sprite. El nombre sigue el patrón `<hoja>_N.asset`, donde `<hoja>` es la hoja de origen y N el índice del sprite cortado:
+
+- `tilemap(18X18)_N.asset` — desde `tilemap(18X18).png`
+- `tilemap-backgrounds(24X24)_N.asset` — desde `tilemap-backgrounds(24X24).png`
+- `tilemap-characters(24X24)_N.asset` — desde `tilemap-characters(24X24).png`
+
+Los tiles nuevos (`Elementos_N.asset`, `Tileset_N.asset`) deben colocarse aquí también, no en la raíz de `Tiles/`, para no mezclarlos con las hojas de sprites.
 
 ### Tiles/TilePalette/
 

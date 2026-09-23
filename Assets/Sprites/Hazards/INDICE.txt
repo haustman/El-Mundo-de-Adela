@@ -1,0 +1,21 @@
+﻿# HAZARDS ASSETS - INDICE RAPIDO
+
+## Ubicacion
+Assets\Sprites\Hazards\
+
+## Para PINCHOS (recomendado):
+  bevouliin_spikes\transparent PNG\spike A.png  (grande)
+  bevouliin_spikes\transparent PNG\spike B.png  (mediano)
+  bevouliin_spikes\transparent PNG\spike C.png  (pequeno)
+  bevouliin_spikes\transparent PNG\spike D.png  (variante)
+
+  O usar:
+  3_spikes.png (3 pinchos en fila)
+  spike.png (pincho individual)
+
+## PACK COMPLETO:
+  kenney_pixel-platformer\  (CC0, incluye spikes y tiles)
+
+## Licencia: CC0 (dominio publico)
+## Fuente: OpenGameArt.org + Kenney.nl
+## Estado: GUARDADOS, NO IMPLEMENTADOS AUN
