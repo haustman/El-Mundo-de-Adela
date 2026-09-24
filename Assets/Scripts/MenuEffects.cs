@@ -46,6 +46,7 @@ public class MenuEffects : MonoBehaviour
 
     CanvasGroup fadeOverlay;
     bool transitioning;
+    string sceneNameToLoad;
 
     void Start()
     {
@@ -175,15 +176,17 @@ public class MenuEffects : MonoBehaviour
         fadeOverlay.blocksRaycasts = false;
     }
 
-    public void StartTransition()
+    public void StartTransition(string sceneName)
     {
         if (transitioning)
             return;
 
+        sceneNameToLoad = sceneName;
+
         // Sin overlay (por ejemplo si no se encontro el objeto "Menu") no hay fundido que hacer.
         if (fadeOverlay == null)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneNameToLoad);
             return;
         }
 
@@ -207,7 +210,7 @@ public class MenuEffects : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.2f);
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneNameToLoad);
     }
 
     // ---------------------------------------------------------------- hover
