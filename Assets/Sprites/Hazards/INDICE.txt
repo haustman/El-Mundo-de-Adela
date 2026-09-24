@@ -12,6 +12,7 @@ Assets\Sprites\Hazards\
   O usar:
   3_spikes.png (3 pinchos en fila)
   spike.png (pincho individual)
+  spike_trap_full.png (trampa completa, vector)
 
 ## PACK COMPLETO:
   kenney_pixel-platformer\  (CC0, incluye spikes y tiles)

@@ -33,10 +33,15 @@ Los nombres deben coincidir con `BossIdle/Walk/Run/Attack.anim` en `Animations/`
 
 ### Sprites/UI/
 
-Assets de interfaz de usuario:
+Assets de interfaz y fondos de escena:
 
 - **Logo.png** — Logo del juego "El Mundo de Adela" (pantalla de menú).
 - **Jugar.png** — Botón de Jugar.
 - **Salir.png** — Botón de Salir.
 - **suit_hearts.png** — Corazón lleno para la HUD.
 - **suit_hearts_broken.png** — Corazón roto (cuando perdés vida).
+- **Fondo para juego.jpg** — Fondo del nivel (1366×768). Va como hijo de la Main Camera, sorting −100.
+
+### Sprites/Hazards/
+
+Assets CC0 de peligros **guardados sin implementar** (pinchos): PNGs sueltos, pack Bevouliin y Kenney Pixel Platformer. Ver `Hazards/README.md` e `Hazards/INDICE.txt`.

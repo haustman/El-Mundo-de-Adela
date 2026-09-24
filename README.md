@@ -22,18 +22,18 @@ La historia de verdad (los 5 libros y sus secretos) **todavía no está implemen
   - Cuerpo a cuerpo: patrulla por una ruta y hace daño al tocarte.
   - A distancia: patrulla y dispara.
   - Los dos tienen barra de vida y reciben daño de tus proyectiles.
-- **Recogibles**: corazones que curan (hasta el máximo de 3). *(Código listo; todavía no hay ninguno colocado en el nivel.)*
+- **Recogibles**: corazones que curan (hasta el máximo de 3). *(Hay 1 corazón colocado en el nivel.)*
 - **Meta**: al tocarla se acaba el nivel y este vuelve a empezar. *(Código listo; todavía no hay ninguna colocada en el nivel.)*
 - **Menú**: logo con fade-in y titileo, botones con hover y sombra, fundido a negro al entrar al juego.
 - **Cámara**: sigue a Adela con encuadre en el tercio inferior de la pantalla.
-- **Cielo**: fondo con deriva suave para que parezca que se mueve.
+- **Fondo**: imagen `Fondo para juego` como hijo de la cámara (sorting −100).
 - **HUD**: corazones de vida.
 - **Arte**: hoja de botones troceada en 72 sprites (claro/medio/oscuro), lista para usarse.
 
 ### Qué hay realmente colocado en `SampleScene`
 
-- **Sí**: jugador, cámara, tilemap de suelo, 2 enemigos cuerpo a cuerpo, 3 enemigos a distancia (cada uno con su barra de vida) y el HUD de corazones.
-- **No** (el código existe, pero no hay instancia en el nivel): **corazones**, **meta** y **jefe**. Hasta que se coloquen, estas piezas no aparecen en partida.
+- **Sí**: jugador, cámara (con `Fondo para juego`), tilemap de suelo, tilemaps de decoración `Trees_Back`/`Trees_Front` (vacíos, sin colliders), **1** enemigo cuerpo a cuerpo (`Enemy (1)`), **4** enemigos a distancia (`EnemyShooter`, `(1)`, `(2)`, `(3)`, cada uno con su barra de vida), **1 corazón** (`Hearts`) y el HUD de corazones.
+- **No** (el código existe, pero no hay instancia en el nivel): **meta** y **jefe**. Hasta que se coloquen, estas piezas no aparecen en partida.
 
 ### Lo que falta
 
@@ -105,12 +105,13 @@ Es la pantalla de inicio. Dentro hay:
 
 Es el nivel. Dentro hay:
 
-- **Main Camera** → con `CameraController`; sigue al jugador y fabrica el fondo de cielo.
+- **Main Camera** → con `CameraController`; sigue al jugador. Como hijo lleva el sprite **Fondo para juego** (sorting −100).
 - **Character** → el jugador, con `PlayerController`, un `Rigidbody2D` y su `Animator`.
 - **HUD** → con `HUDController`, dibuja los corazones de vida.
-- **Tilemap** → el suelo, pintado con la paleta de tiles.
-- **Enemy** y **Enemy (1)** → enemigos cuerpo a cuerpo. Cada uno patrulla entre `Patrol1` y `Patrol1 (1)` y tiene su `Slider` de vida (`EnemyHUDController`).
-- **EnemyShooter**, **EnemyShooter (1)** y **EnemyShooter (2)** → enemigos a distancia, cada uno con su `Slider` (`EnemyShooterHUDController`) y `shootNum = 3`.
+- **Grid** → con el tilemap de suelo (colliders) y los tilemaps de decoración **Trees_Back** (sorting −1) y **Trees_Front** (sorting +1), sin colliders (para caminar entre árboles).
+- **Hearts** → 1 corazón recolectable (`Heart.cs`).
+- **Enemy (1)** → enemigo cuerpo a cuerpo. Patrulla y tiene su `Slider` de vida (`EnemyHUDController`).
+- **EnemyShooter**, **EnemyShooter (1)**, **EnemyShooter (2)** y **EnemyShooter (3)** → 4 enemigos a distancia, cada uno con su `Slider` (`EnemyShooterHUDController`) y `shootNum = 3`.
 - **EventSystem** → necesario para la UI.
 
 ---
@@ -131,9 +132,11 @@ Todo lo del escenario vive en `Assets/Tiles/` y se pinta sobre el **Tilemap** de
 | `Fondo.png` | fondo decorativo del menú/nivel |
 | `button ver 2 (785x271).png` | hoja de botones de UI |
 
+El fondo del nivel no está en `Tiles/`: es `Assets/Sprites/UI/Fondo para juego.jpg` (objeto `Fondo para juego` en la escena). Los assets de pinchos sin usar están en `Assets/Sprites/Hazards/`.
+
 ### Subcarpetas
 
-- **`Tiles/Tiles/`** → un `.asset` por sprite. Son los "ladrillos" que se colocan. El nombre sigue el patrón `<hoja>_N`: `tilemap(18X18)_N.asset`, `tilemap-backgrounds(24X24)_N.asset`, `tilemap-characters(24X24)_N.asset`, `Elementos_N.asset` y `Tileset_N.asset`.
+- **`Tiles/Tiles/`** → un `.asset` por sprite usado en el nivel. El nombre sigue el patrón `<hoja>_N`. Hoy hay la serie completa de `tilemap(18X18)` / `tilemap-backgrounds` / `tilemap-characters`, y solo unos pocos `Elementos_N` (3 de 70) y `Tileset_N` (2 de 8): se generan al pintar o al crear tiles desde el Sprite Editor.
 - **`Tiles/Terrain/`** → tiles de terreno individuales (`Terrain.asset`, `Terrain_Fill.asset`, `Terrain_RimTop.asset`, etc.), con sus PNGs en `Terrain/Sprites/`.
 - **`Tiles/TilePalette/New Palette.prefab`** → la paleta que usa el Paint Tool para pintar el tilemap.
 
@@ -147,7 +150,7 @@ Están todos en `Assets/Scripts/`. Son **17** y cada uno hace una sola cosa.
 
 ### Jugador
 - **PlayerController.cs** — Todo el jugador: mover, correr, salto y doble salto, disparar, vida, invulnerabilidad con parpadeo, caída al vacío (resta 1 corazón y reaparece), muerte y `Finish()` para la meta.
-- **CameraController.cs** — Sigue al jugador con un desfase, crea el fondo del cielo desde `Resources/cielo.png` y le da una deriva suave.
+- **CameraController.cs** — Sigue al jugador con un desfase (`offset`) y fija un color de fondo de cámara. El fondo visible es el sprite `Fondo para juego` (hijo de la cámara), no `cielo.png`.
 
 ### Enemigos
 - **Damageable.cs** — Base de todo lo que tiene vida y recibe daño. Guarda `Health`/`MaxHealth`, aplica `GetHit` y prepara la barra la primera vez que hace falta. No se coloca en la escena: de aquí heredan los demás.
@@ -171,7 +174,7 @@ Están todos en `Assets/Scripts/`. Son **17** y cada uno hace una sola cosa.
 - **MenuEffects.cs** — Los adornos del menú: fade-in y titileo del logo, sombra y escala en los botones al pasar el ratón, y el fundido a negro antes de entrar al juego.
 
 ### Objetos
-- **Heart.cs** — Corazón que se recoge y cura 1. Gira sobre sí mismo. *Sin instancia en el nivel.*
+- **Heart.cs** — Corazón que se recoge y cura 1. Gira sobre sí mismo. *(Hay 1 instancia: `Hearts` en SampleScene.)*
 - **FinishPoint.cs** — La meta del nivel: al tocarla llama a `PlayerController.Finish()`. *Sin instancia en el nivel.*
 
 ---
@@ -181,15 +184,17 @@ Están todos en `Assets/Scripts/`. Son **17** y cada uno hace una sola cosa.
 ```
 Assets/
 ├── Animations/     Clips .anim + Character.controller y Boss.controller
+├── Plugins/        Vacío (reservado)
 ├── Prefab/         Prefabs de proyectiles (Bullet 1, Bullet 2, BulletEnemy)
-├── Resources/      Assets cargados desde código (cielo.png)
+├── Resources/      Resources.Load (cielo.png, hoy sin uso en escena)
 ├── Scenes/         Menu.unity + SampleScene.unity
 ├── Scripts/        17 scripts C# (jugador, enemigos, jefe, HUD, menú, cámara)
 ├── Sprites/
 │   ├── Boss/       Sprites del jefe por animación
 │   ├── Character/  Sprites de Adela por animación
+│   ├── Hazards/    Assets CC0 de pinchos (sin implementar)
 │   ├── Projectile/ Arma.png (sprite del disparo)
-│   └── UI/         Logo, botones, corazones
+│   └── UI/         Logo, botones, corazones, Fondo para juego.jpg
 ├── Tiles/          Hojas de tiles, tiles (.asset), terreno y paleta
 └── TextMesh Pro/   Importación estándar
 ```
@@ -203,13 +208,13 @@ Assets/
 | Qué | Dónde | Valor actual |
 |---|---|---|
 | Zoom / encuadre (ortho size) | Inspector → Camera → **Orthographic Size** | **6** (12 unidades de alto a la vista; menor = más zoom) |
-| Posición inicial | Transform del Main Camera | `(0, -0.53, -10)` — en runtime la sigue el script |
+| Posición inicial | Transform del Main Camera | `(2.06, -11.37, -10)` — en runtime la sigue el script |
 | Sigue al jugador con desfase | `CameraController.offset` (Inspector del Main Camera) | **(2, 2)** → Adela queda en el tercio inferior-derecho |
 | Objetivo | `CameraController.target` | Transform del objeto **Character** |
-| Deriva del cielo | `CameraController` → `driftSpeed`, `driftRangeX/Y` | `0.3`, `5`, `0.8` |
-| Fondo del cielo | `Assets/Resources/cielo.png` (cargado por código) | reemplazar el PNG cambia el fondo |
+| Color de fondo de la cámara | `CameraController.Awake` (código) | Azul cielo fijo `(0.53, 0.81, 0.98)` |
+| Fondo visible | Hijo de la cámara: **Fondo para juego** | Sprite `Sprites/UI/Fondo para juego.jpg`, escala 2×2, local `(0,0,10)`, sorting **−100** |
 
-El script de cámara es `Assets/Scripts/CameraController.cs`: en `LateUpdate` coloca la cámara en `target.position + offset`, con `z = -10`.
+El script de cámara es `Assets/Scripts/CameraController.cs`: en `LateUpdate` coloca la cámara en `target.position + offset`, con `z = -10`. No carga `cielo.png` ni tiene deriva/parallax.
 
 ### Jugador — objeto **Character**, script `Assets/Scripts/PlayerController.cs`
 
@@ -221,7 +226,7 @@ El script de cámara es `Assets/Scripts/CameraController.cs`: en `LateUpdate` co
 | `maxJumpCount` | 2 | salto simple + doble salto |
 | `groundDetectionRange` | 0.66 | longitud del raycast de suelo |
 | `health` / `maxHealth` | 3 | corazones |
-| `deathHeight` | -30 | por debajo de Y = -30 cuenta como caída al vacío |
+| `deathHeight` | -36 | por debajo de Y = -36 cuenta como caída al vacío |
 
 - **Gravedad del jugador**: componente `Rigidbody2D` del Character → **Gravity Scale = 5** (con jumpForce 20 sube unas 4 unidades en ~0.4 s).
 - **Gravedad global**: `ProjectSettings/Physics2DSettings.asset` (`-9.81`).

@@ -5,15 +5,17 @@ Carpeta raíz de todos los assets del proyecto Unity.
 ```
 Assets/
 ├── Animations/    Clips y controller del Animator
+├── Plugins/       Vacío (reservado)
 ├── Prefab/        Prefabs de proyectiles
-├── Resources/     Assets que se cargan desde código
+├── Resources/     Assets que se cargan desde código (cielo.png, sin uso actual)
 ├── Scenes/        Escenas (Menu + SampleScene)
 ├── Scripts/       Código C# (17 scripts)
 ├── Sprites/       Imágenes y spritesheets
 │   ├── Boss/        Sprites del jefe por animación
 │   ├── Character/   Sprite del jugador por animación
+│   ├── Hazards/     Assets CC0 de pinchos (sin implementar)
 │   ├── Projectile/  Sprite del disparo (Arma.png)
-│   └── UI/          Logo, botones, corazones
+│   └── UI/          Logo, botones, corazones, Fondo para juego.jpg
 ├── TextMesh Pro/  Importación estándar de TMP
 └── Tiles/         Tiles, tilemaps y paleta
 ```
