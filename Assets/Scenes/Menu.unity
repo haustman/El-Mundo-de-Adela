@@ -719,7 +719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d462d8354a662fa4ca868c21b4c4f518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSceneName: SampleScene
+  gameSceneName: Niveles
 --- !u!114 &1157982786
 MonoBehaviour:
   m_ObjectHideFlags: 0
