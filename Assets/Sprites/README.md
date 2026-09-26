@@ -36,11 +36,12 @@ Los nombres deben coincidir con `BossIdle/Walk/Run/Attack.anim` en `Animations/`
 Assets de interfaz y fondos de escena:
 
 - **Logo.png** — Logo del juego "El Mundo de Adela" (pantalla de menú).
-- **Jugar.png** — Botón de Jugar.
-- **Salir.png** — Botón de Salir.
+- **Jugar.png** — Botón de Jugar. **Sin usar**: no lo referencia ninguna escena (los botones usan la hoja `Tiles/button ver 2 (785x271).png`).
+- **Salir.png** — Botón de Salir. **Sin usar**, igual que `Jugar.png`.
 - **suit_hearts.png** — Corazón lleno para la HUD.
 - **suit_hearts_broken.png** — Corazón roto (cuando perdés vida).
-- **Fondo para juego.jpg** — Fondo del nivel (1366×768). Va como hijo de la Main Camera, sorting −100.
+- **Fondo.png** — Fondo del nivel (1024×1536). Es el sprite del objeto `Fondo para juego`, hijo de la Main Camera con sorting −100.
+- **Fondo para juego.jpg** — Fondo original del nivel (1366×768). **Ya no se usa**: ninguna escena lo referencia (lo reemplazó `Fondo.png`). Se mantiene por si se reutiliza.
 
 ### Sprites/Hazards/
 

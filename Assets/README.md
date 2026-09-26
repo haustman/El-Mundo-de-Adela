@@ -8,14 +8,21 @@ Assets/
 ├── Plugins/       Vacío (reservado)
 ├── Prefab/        Prefabs de proyectiles
 ├── Resources/     Assets que se cargan desde código (cielo.png, sin uso actual)
-├── Scenes/        Escenas (Menu + SampleScene)
-├── Scripts/       Código C# (17 scripts)
+├── Scenes/        Escenas (Menu + Niveles + Nivel_1)
+├── Scripts/       Código C# (18 scripts) organizado por tipo
+│   ├── Player/      PlayerController
+│   ├── Enemies/     Damageable, Enemy, EnemyShooter, Boss, PatrolRoute
+│   ├── Projectiles/ Projectile, ProjectileEnemy
+│   ├── UI/HUD/      HUD y barras de vida
+│   ├── UI/Menu/     Menu, MenuEffects
+│   ├── Level/       CameraController, FinishPoint, Heart
+│   └── SelectorNivel/ SelectorNivelController
 ├── Sprites/       Imágenes y spritesheets
 │   ├── Boss/        Sprites del jefe por animación
 │   ├── Character/   Sprite del jugador por animación
 │   ├── Hazards/     Assets CC0 de pinchos (sin implementar)
 │   ├── Projectile/  Sprite del disparo (Arma.png)
-│   └── UI/          Logo, botones, corazones, Fondo para juego.jpg
+│   └── UI/          Logo y corazones (en uso), Fondo.png (nivel); Jugar/Salir.png y Fondo para juego.jpg sin uso
 ├── TextMesh Pro/  Importación estándar de TMP
 └── Tiles/         Tiles, tilemaps y paleta
 ```
