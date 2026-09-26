@@ -2,11 +2,14 @@ fileFormatVersion: 2
 guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6
 TextureImporter:
   internalIDToNameTable:
-  - first: 21300000
+  - first:
+      213: 21300000
     second: Danger_0
-  - first: 21300001
+  - first:
+      213: 21300001
     second: Danger_1
-  - first: 21300002
+  - first:
+      213: 21300002
     second: Danger_2
   externalObjects: {}
   serializedVersion: 12
