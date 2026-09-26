@@ -25,7 +25,7 @@ namespace ElMundoDeAdela
         PatrolRoute route;
 
         // La ruta se construye la primera vez que se usa, sin depender del orden de Start.
-        PatrolRoute Route => route ??= new PatrolRoute(patrolPositions);
+        PatrolRoute Route => route ??= new PatrolRoute(patrolPositions, transform.position);
 
         protected override void SetupHUD()
         {

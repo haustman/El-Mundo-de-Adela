@@ -22,11 +22,15 @@ namespace ElMundoDeAdela
         readonly List<Vector3> points = new List<Vector3>();
         readonly List<float> durations = new List<float>();
 
+        Vector3 origin;
+
         int index;
         float elapsed;
 
-        public PatrolRoute(List<PatrolMovement> source)
+        public PatrolRoute(List<PatrolMovement> source, Vector3 startPosition)
         {
+            origin = startPosition;
+
             if (source == null)
                 return;
 
@@ -65,7 +69,9 @@ namespace ElMundoDeAdela
         {
             elapsed += deltaTime;
 
-            var origin = points[index > 0 ? index - 1 : points.Count - 1];
+            if (points.Count == 0)
+                return origin;
+
             return Vector3.Lerp(origin, points[index], Progress);
         }
 
@@ -78,6 +84,9 @@ namespace ElMundoDeAdela
         /// <summary>Pasa al siguiente punto. Devuelve true si con ello cierra la vuelta completa.</summary>
         public bool Next()
         {
+            if (points.Count > 0)
+                origin = points[index];
+
             index++;
             elapsed = 0f;
 

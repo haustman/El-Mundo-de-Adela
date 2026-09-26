@@ -35,7 +35,7 @@ namespace ElMundoDeAdela
         PatrolRoute route;
         float nextAttackTime;
 
-        PatrolRoute Route => route ??= new PatrolRoute(patrolPositions);
+        PatrolRoute Route => route ??= new PatrolRoute(patrolPositions, transform.position);
 
         protected override void SetupHUD()
         {
