@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class Menu : MonoBehaviour
 {
-    [SerializeField] string gameSceneName = "SampleScene";
+    [SerializeField] string gameSceneName = "Niveles";
 
     MenuEffects effects;
 

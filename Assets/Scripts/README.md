@@ -1,34 +1,92 @@
 # Scripts
 
-Todos los scripts C# del juego (17 en total). Cada uno tiene una sola responsabilidad.
+Todos los scripts C# del juego (**18 en total**), organizados por tipo (dominio), no por escena: así los scripts compartidos no hay que moverlos cada vez que se crea un nivel nuevo.
 
-### Jugador
-- **PlayerController.cs** — Movimiento, salto, disparo, vida y animación del jugador. Maneja la caída al vacío, la secuencia de muerte y la llegada a la meta.
-- **CameraController.cs** — Sigue al jugador con un desfase (`offset`) y fija el color de fondo de la cámara. El fondo visible es el sprite `Fondo para juego` (hijo de la cámara), no `cielo.png`.
+> **Regla de oro:** los `.cs` se mueven siempre **junto con su `.meta`** y con Unity cerrado. Unity identifica los scripts por el GUID del `.meta`, no por la ruta → escenas y prefabs no se rompen.
 
-### Enemigos
-- **Enemy.cs** — Enemigo cuerpo a cuerpo. Patrulla y daña al tocar.
-- **EnemyShooter.cs** — Enemigo a distancia. Patrulla y dispara.
-- **Boss.cs** — Jefe: patrulla opcional, ataca al entrar en rango con animación de ataque. *(Sin instancia en el nivel actual.)*
-- **PatrolRoute.cs** — Lógica de patrulla reutilizable (interpolación entre puntos). Define también el tipo serializable `PatrolMovement` (punto + duración).
+## Estructura
 
-### Combate
-- **Damageable.cs** — Clase base para todo lo que tiene vida y puede recibir daño.
-- **Projectile.cs** — Proyectil del jugador.
-- **ProjectileEnemy.cs** — Proyectil enemigo.
+```
+Assets/Scripts/
+├── Player/          PlayerController.cs
+├── Enemies/         Damageable, Enemy, EnemyShooter, Boss, PatrolRoute
+├── Projectiles/     Projectile, ProjectileEnemy
+├── UI/
+│   ├── HUD/         HUDController, HealthBarController,
+│   │                EnemyHUDController, EnemyShooterHUDController
+│   └── Menu/        Menu, MenuEffects
+├── Level/           CameraController, FinishPoint, Heart
+└── SelectorNivel/   SelectorNivelController
+```
 
-### UI
-- **HUDController.cs** — Corazones de vida del jugador.
-- **HealthBarController.cs** — Barra de vida reutilizable (para enemigos).
-- **EnemyHUDController.cs** — Barra de vida de enemigos cuerpo a cuerpo.
-- **EnemyShooterHUDController.cs** — Barra de vida de enemigos a distancia.
+Cada carpeta tiene su propio `README.md` explicando qué hay, para qué sirve y en qué escena se usa.
 
-Las dos son subclases vacías de `HealthBarController`: no añaden lógica, solo existen para distinguir una barra de otra en el Inspector.
+## Mapa de flujo: qué script va en qué escena
 
-### Menú
-- **Menu.cs** — Lógica del menú principal (Jugar y Salir).
-- **MenuEffects.cs** — Efectos del menú: fade-in del logo con parpadeo, sombra en botones al hover, transición con fade a negro.
+### 🎬 Menu.unity (menú principal)
+```
+Canvas  ←─────────────── MenuEffects.cs (está en el Canvas)
+│                         fade logo, hover botones, transición a negro
+│                         └── carga escena "Niveles" (SceneManager)
+└── Menu (objeto) ←───── Menu.cs + Image de fondo (Tiles/Fondo.png)
+    ├── Image ── logo (fade-in + titileo, animado por MenuEffects)
+    ├── Jugar ──▶ Menu.Play() ──▶ MenuEffects.StartTransition("Niveles")
+    └── Salir ──▶ Menu.Quit()
+```
 
-### Objetos
-- **Heart.cs** — Corazón recolectable que cura al jugador. *(Hay 1 instancia: `Hearts` en SampleScene.)*
-- **FinishPoint.cs** — Meta del nivel. Llama a `PlayerController.Finish()`, que recarga el nivel. *(Sin instancia en el nivel.)*
+### 🗂️ Niveles.unity (selector de niveles)
+```
+Canvas (UI armada en la escena, se edita con el ratón)
+└── Panel ── VerticalLayoutGroup ── Titulo, Nivel 1..5, Espacio, Volver
+
+Selector de Niveles ◄── SelectorNivelController.cs (objeto raíz de la escena)
+│                         enlaza botonesNivel ↔ levelSceneNames y comprueba con
+│                         Application.CanStreamedLevelBeLoaded qué niveles existen
+├── Nivel 1 ──▶ LoadScene("Nivel_1") ──▶ SceneManager.LoadScene
+├── Nivel 2..5 ──▶ "próximamente" (botón deshabilitado: su escena aún no está en Build Settings)
+└── Volver / Esc ──▶ LoadScene("Menu") ──▶ vuelve al menú
+```
+
+### 🎮 Nivel_1.unity (nivel jugable)
+```
+Character (jugador)
+└── PlayerController.cs ──► dispara Projectile, muere/gana, recarga escena
+        ▲   ▲   ▲
+        │   │   └── FinishPoint.cs (meta) y Heart.cs (cura) lo detectan
+        │   └────── ProjectileEnemy.cs (bala enemiga) lo daña
+        └────────── Enemy / EnemyShooter / Boss (cuerpo a cuerpo) lo dañan
+
+Main Camera
+└── CameraController.cs ──► sigue al jugador LateUpdate + color de fondo
+
+Enemigos (Enemy, EnemyShooter, Boss)
+├── heredan de ▶ Damageable.cs (vida/daño)
+├── patrullan con ▶ PatrolRoute.cs (puntos Patrol1)
+├── EnemyShooter instancia ▶ ProjectileEnemy.cs (prefab BulletEnemy)
+└── cada uno tiene su barra ▶ EnemyHUDController / EnemyShooterHUDController
+                              (heredan de HealthBarController)
+
+Jugador dispara ▶ Projectile.cs (prefabs Bullet 1 / Bullet 2)
+                     └── al impactar busca un Damageable y lo daña
+
+HUD del jugador
+└── HUDController.cs ──► muestra los corazones de vida
+```
+
+## Herencias (lo único que "cruza" carpetas)
+
+```
+Damageable (Enemies/)          HealthBarController (UI/HUD/)
+├── Enemy (Enemies/)           ├── EnemyHUDController (UI/HUD/)
+├── EnemyShooter (Enemies/)    └── EnemyShooterHUDController (UI/HUD/)
+└── Boss (Enemies/)
+```
+
+Mover archivos **no rompe estas herencias**: C# compila todos los `.cs` de `Assets/` en el mismo ensamblado (`Assembly-CSharp`) sin importar la subcarpeta, y las clases se referencian por nombre, nunca por ruta.
+
+## Qué scripts NO están en ninguna escena todavía
+
+| Script | Estado |
+|---|---|
+| `Boss.cs` | Listo, sin instancia en el nivel |
+| `FinishPoint.cs` | Listo, sin instancia (colocar la meta) |
