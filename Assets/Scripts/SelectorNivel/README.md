@@ -1,7 +1,7 @@
 # SelectorNivel/
 
 ### Qué hay
-- **SelectorNivelController.cs** — Lógica del selector de niveles. La interfaz (panel, botones, orden, colores, fuente) **se arma y se edita en la escena** `Niveles.unity`; este script solo la conecta.
+- **SelectorNivelController.cs** — Lógica del selector de niveles. La interfaz (panel, botones, orden, colores, fuente) **se arma y se edita en la escena** `Niveles.unity`; este script solo la conecta. Vive en el namespace `ElMundoDeAdela`.
 
 ### Escena donde se usa
 - **Niveles.unity** (índice 1 en Build Settings). La UI vive en el `Canvas` de la escena: `Fondo`, `Panel` (con `VerticalLayoutGroup`) → `Titulo`, `Nivel 1`…`Nivel 5`, `Espacio`, `Volver`. El script cuelga del objeto raíz **Selector de Niveles** y apunta a los botones por referencia en el Inspector.

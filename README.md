@@ -159,7 +159,7 @@ Si cambias o recortas una hoja, hay que volver a cortar los sprites en el Sprite
 
 ## Los scripts
 
-Están organizados por tipo (dominio) en subcarpetas de `Assets/Scripts/` — **18 en total**, cada uno con una sola cosa. Cada subcarpeta tiene su propio `README.md`, y el mapa de flujo completo (qué script va en qué escena y cómo se conectan) está en `Assets/Scripts/README.md`.
+Están organizados por tipo (dominio) en subcarpetas de `Assets/Scripts/` — **18 en total**, cada uno con una sola cosa. Todos viven en el namespace `ElMundoDeAdela`. Cada subcarpeta tiene su propio `README.md`, y el mapa de flujo completo (qué script va en qué escena y cómo se conectan) está en `Assets/Scripts/README.md`.
 
 ```
 Assets/Scripts/
@@ -241,23 +241,35 @@ Assets/
 | Zoom / encuadre (ortho size) | Inspector → Camera → **Orthographic Size** | **6** (12 unidades de alto a la vista; menor = más zoom) |
 | Posición inicial | Transform del Main Camera | `(3.2, -10.4, -10)` — en runtime la sigue el script |
 | Sigue al jugador con desfase | `CameraController.offset` (Inspector del Main Camera) | **(2, 2)** → Adela queda en el tercio inferior-derecho |
+| Suavizado del seguimiento | `CameraController.smoothing` | **0** = rígido; mayor = más suave |
 | Objetivo | `CameraController.target` | Transform del objeto **Character** |
-| Color de fondo de la cámara | `CameraController.Awake` (código) | Azul cielo fijo `(0.53, 0.81, 0.98)` |
+| Color de fondo de la cámara | `CameraController.backgroundColor` (Inspector) | Azul cielo `(0.53, 0.81, 0.98)` |
 | Fondo visible | Hijo de la cámara: **Fondo para juego** | Sprite `Sprites/UI/Fondo.png`, escala `(1.72, 1.28, 0.25)`, local `(0.01, 1.18, 10)`, sorting **−100** |
 
-El script de cámara es `Assets/Scripts/Level/CameraController.cs`: en `LateUpdate` coloca la cámara en `target.position + offset`, con `z = -10`. No carga `cielo.png` ni tiene deriva/parallax.
+El script de cámara es `Assets/Scripts/Level/CameraController.cs`: en `LateUpdate` coloca la cámara en `target.position + offset`, con `z = -10` (con `smoothing` opcional). El color de fondo sale del campo `backgroundColor` del Inspector, no del código. No carga `cielo.png` ni tiene deriva/parallax.
 
 ### Jugador — objeto **Character**, script `Assets/Scripts/Player/PlayerController.cs`
 
-| Campo (Inspector) | Valor | Qué hace |
+| Campo (Inspector) | Valor por defecto | Qué hace |
 |---|---|---|
 | `movementSpeed` | 10 | velocidad al caminar |
 | `runSpeedMultiplier` | 1.6 | multiplicador con Shift |
+| `runKey` | Left Shift | tecla para correr |
 | `jumpForce` | 20 | impulso del salto (velocidad inicial) |
 | `maxJumpCount` | 2 | salto simple + doble salto |
+| `jumpKey` | Space | tecla de salto |
 | `groundDetectionRange` | 0.66 | longitud del raycast de suelo |
+| `damage` | 1 | daño de cada proyectil |
+| `firePoint` | (vacío) | punto de salida del proyectil; vacío = centro del jugador |
+| `shotDelay` | 0.13 | retardo entre la animación de ataque y la salida del proyectil (s) |
 | `health` / `maxHealth` | 3 | corazones |
+| `blinkCount` | 3 | parpadeos de invulnerabilidad tras un golpe |
+| `blinkHalfPeriod` | 0.2 | duración de cada medio parpadeo (s) |
 | `deathHeight` | -36 | por debajo de Y = -36 cuenta como caída al vacío |
+| `deathAnimationDuration` | 0.5 | espera antes de volver al menú |
+| `menuSceneName` | Menu | escena a la que vuelve al morir |
+| `fallDamage` | 1 | corazones que resta caer al vacío |
+| `respawnPoint` | (vacío) | dónde reaparece; vacío = posición inicial |
 
 - **Gravedad del jugador**: componente `Rigidbody2D` del Character → **Gravity Scale = 5** (con jumpForce 20 sube unas 4 unidades en ~0.4 s).
 - **Gravedad global**: `ProjectSettings/Physics2DSettings.asset` (`-9.81`).
@@ -275,6 +287,8 @@ El script de cámara es `Assets/Scripts/Level/CameraController.cs`: en `LateUpda
 
 `Character.controller` usa los parámetros que pone `PlayerController.cs`: `isMoving`, `isRunning`, `isGrounded` (bool), `attack`, `takeDamage` (trigger) e `isDead` (bool).
 `Boss.controller` usa `isMoving`, `isRunning` y `attack`, que pone `Boss.cs`.
+
+El ataque del jugador suelta el proyectil tras un retardo configurable (`shotDelay`), no al pulsar el botón, y las transiciones AnyState están ordenadas para que **muerte y daño tengan prioridad sobre el salto**. Detalles en `Assets/Animations/README.md`.
 
 ---
 

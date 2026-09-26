@@ -899,7 +899,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2, y: -10.4, z: -10}
+  m_LocalPosition: {x: 3.81, y: -10.6, z: -10}
   m_LocalScale: {x: 1.275, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -918,8 +918,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41b3af7341a9e4442aba2fc3004c2d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 2, y: 2}
   target: {fileID: 1462819170}
+  offset: {x: 2, y: 2}
+  smoothing: 0
+  backgroundColor: {r: 0.53, g: 0.81, b: 0.98, a: 1}
 --- !u!1 &608186577
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,8 +1046,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43b208791efc4137aa4f5c2e185041d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
-  Health: 5
+  health: 5
+  destroyOnDeath: 1
   canPatrol: 1
   patrolPositions:
   - patrolPosition: {fileID: 1667511147}
@@ -11956,23 +11958,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbe2c187d5804b01ae8a88bbb3095e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 5
-  Health: 5
+  health: 5
+  destroyOnDeath: 1
   shape: {fileID: 1727281788}
-  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
   canPatrol: 1
   patrolPositions:
   - patrolPosition: {fileID: 751214312}
     duration: 2
   - patrolPosition: {fileID: 608186578}
     duration: 2
+  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
+  shootNum: 3
   characterLayer:
     serializedVersion: 2
     m_Bits: 64
   characterDetectionRange: 0.5
   damage: 1
   HUD: {fileID: 1193672992}
-  shootNum: 3
 --- !u!58 &901947388
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -12792,6 +12794,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 128
+  firePoint: {fileID: 0}
   movementSpeed: 10
   runSpeedMultiplier: 1.6
   runKey: 304
@@ -12802,10 +12805,16 @@ MonoBehaviour:
   projectilePrefabRight: {fileID: 5600075084235908127, guid: 5f6d8f5a215d048ce81a2c03f0abf3c8, type: 3}
   projectilePrefabLeft: {fileID: 5600075084235908127, guid: 42259805ff59c477e98a1addd0976302, type: 3}
   damage: 2
+  shotDelay: 0.13
   health: 3
   maxHealth: 3
+  blinkCount: 3
+  blinkHalfPeriod: 0.2
   deathHeight: -36
   deathAnimationDuration: 0.5
+  menuSceneName: Menu
+  fallDamage: 1
+  respawnPoint: {fileID: 0}
 --- !u!50 &1462819168
 Rigidbody2D:
   serializedVersion: 4
@@ -13116,23 +13125,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbe2c187d5804b01ae8a88bbb3095e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 5
-  Health: 5
+  health: 5
+  destroyOnDeath: 1
   shape: {fileID: 917365463}
-  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
   canPatrol: 1
   patrolPositions:
   - patrolPosition: {fileID: 82124424}
     duration: 2
   - patrolPosition: {fileID: 345509482}
     duration: 2
+  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
+  shootNum: 3
   characterLayer:
     serializedVersion: 2
     m_Bits: 64
   characterDetectionRange: 0.5
   damage: 1
   HUD: {fileID: 1696827613}
-  shootNum: 3
 --- !u!58 &1534233608
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -13476,23 +13485,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbe2c187d5804b01ae8a88bbb3095e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 5
-  Health: 5
+  health: 5
+  destroyOnDeath: 1
   shape: {fileID: 682655922}
-  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
   canPatrol: 1
   patrolPositions:
   - patrolPosition: {fileID: 1355153207}
     duration: 2
   - patrolPosition: {fileID: 1053895523}
     duration: 2
+  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
+  shootNum: 3
   characterLayer:
     serializedVersion: 2
     m_Bits: 64
   characterDetectionRange: 0.5
   damage: 1
   HUD: {fileID: 1492482187}
-  shootNum: 3
 --- !u!58 &1603333693
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -13587,10 +13596,10 @@ GameObject:
   - component: {fileID: 1610376129}
   m_Layer: 5
   m_Name: Hearts
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!114 &1610376129
 MonoBehaviour:
@@ -13608,6 +13617,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   characterDetectionRange: 0
+  healAmount: 1
   rotationSpeed: 200
 --- !u!212 &1610376130
 SpriteRenderer:
@@ -14131,23 +14141,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbe2c187d5804b01ae8a88bbb3095e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 5
-  Health: 5
+  health: 5
+  destroyOnDeath: 1
   shape: {fileID: 1510066738}
-  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
   canPatrol: 1
   patrolPositions:
   - patrolPosition: {fileID: 867407224}
     duration: 2
   - patrolPosition: {fileID: 1835935334}
     duration: 2
+  projectilePrefab: {fileID: 2847330043957093175, guid: 1f5f601522a03463a97fe4dcd1df0efa, type: 3}
+  shootNum: 3
   characterLayer:
     serializedVersion: 2
     m_Bits: 64
   characterDetectionRange: 0.5
   damage: 1
   HUD: {fileID: 893899247}
-  shootNum: 3
 --- !u!58 &1765469364
 CircleCollider2D:
   m_ObjectHideFlags: 0

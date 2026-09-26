@@ -1,2 +1,5 @@
-/// <summary>Barra de vida del enemigo cuerpo a cuerpo.</summary>
-public class EnemyHUDController : HealthBarController { }
+namespace ElMundoDeAdela
+{
+    /// <summary>Barra de vida del enemigo cuerpo a cuerpo.</summary>
+    public class EnemyHUDController : HealthBarController { }
+}

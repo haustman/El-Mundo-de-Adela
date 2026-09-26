@@ -9,7 +9,7 @@
 | **EnemyShooterHUDController.cs** | Barra de vida de enemigos a distancia. |
 
 ### Para qué sirven
-- `HUDController` muestra la vida del jugador en pantalla.
+- `HUDController` muestra la vida del jugador en pantalla. Expone la instancia activa en `HUDController.Instance` (se limpia en `OnDestroy`) y `HUDController.Refresh(vida)` se puede llamar desde cualquier sitio sin comprobar si el HUD existe.
 - `HealthBarController` dibuja una barra de vida genérica que sigue a su enemigo.
 - `EnemyHUDController` y `EnemyShooterHUDController` son **subclases vacías** (`{ }`): no añaden lógica, solo existen para distinguir cada tipo de barra en el Inspector.
 

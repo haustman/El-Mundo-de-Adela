@@ -1,29 +1,40 @@
 using UnityEngine;
 
-/// <summary>
-/// Sigue al objetivo manteniendo el desplazamiento configurado.
-/// </summary>
-public class CameraController : MonoBehaviour
+namespace ElMundoDeAdela
 {
-    [SerializeField] Vector2 offset;
-    [SerializeField] Transform target;
-
-    void Awake()
+    /// <summary>
+    /// Sigue al objetivo manteniendo el desplazamiento configurado y fija el color de fondo.
+    /// </summary>
+    public class CameraController : MonoBehaviour
     {
-        var cam = GetComponent<Camera>();
-        if (cam != null)
-            cam.backgroundColor = new Color(0.53f, 0.81f, 0.98f, 1f);
-    }
+        [SerializeField] Transform target;
+        [Tooltip("Desplazamiento de la cámara respecto al objetivo.")]
+        [SerializeField] Vector2 offset = new Vector2(2f, 2f);
+        [Tooltip("Tiempo de suavizado del seguimiento. 0 = rígido.")]
+        [SerializeField] float smoothing = 0f;
+        [SerializeField] Color backgroundColor = new Color(0.53f, 0.81f, 0.98f, 1f);
 
-    void LateUpdate()
-    {
-        if (target)
+        Camera cam;
+        Vector3 velocity;
+
+        void Awake()
         {
-            var position = target.position;
-            position.x += offset.x;
-            position.y += offset.y;
-            position.z = -10f;
-            transform.position = position;
+            cam = GetComponent<Camera>();
+            if (cam)
+                cam.backgroundColor = backgroundColor;
+        }
+
+        void LateUpdate()
+        {
+            if (!target)
+                return;
+
+            var desired = target.position + (Vector3)offset;
+            desired.z = -10f;
+
+            transform.position = smoothing > 0f
+                ? Vector3.SmoothDamp(transform.position, desired, ref velocity, smoothing)
+                : desired;
         }
     }
 }

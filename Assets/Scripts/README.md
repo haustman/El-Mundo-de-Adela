@@ -1,6 +1,6 @@
 # Scripts
 
-Todos los scripts C# del juego (**18 en total**), organizados por tipo (dominio), no por escena: así los scripts compartidos no hay que moverlos cada vez que se crea un nivel nuevo.
+Todos los scripts C# del juego (**18 en total**), organizados por tipo (dominio), no por escena: así los scripts compartidos no hay que moverlos cada vez que se crea un nivel nuevo. Todos viven en el namespace `ElMundoDeAdela`, para no chocar con clases de assets externos.
 
 > **Regla de oro:** los `.cs` se mueven siempre **junto con su `.meta`** y con Unity cerrado. Unity identifica los scripts por el GUID del `.meta`, no por la ruta → escenas y prefabs no se rompen.
 
@@ -82,7 +82,7 @@ Damageable (Enemies/)          HealthBarController (UI/HUD/)
 └── Boss (Enemies/)
 ```
 
-Mover archivos **no rompe estas herencias**: C# compila todos los `.cs` de `Assets/` en el mismo ensamblado (`Assembly-CSharp`) sin importar la subcarpeta, y las clases se referencian por nombre, nunca por ruta.
+Mover archivos **no rompe estas herencias**: C# compila todos los `.cs` de `Assets/` en el mismo ensamblado (`Assembly-CSharp`) sin importar la subcarpeta, y las clases se referencian por nombre (dentro del mismo namespace `ElMundoDeAdela`), nunca por ruta.
 
 ## Qué scripts NO están en ninguna escena todavía
 

@@ -1,64 +1,67 @@
 using UnityEngine;
 
-/// <summary>Proyectil enemigo: avanza en linea recta y dana al primer objetivo que toca.</summary>
-public class ProjectileEnemy : MonoBehaviour
+namespace ElMundoDeAdela
 {
-    [SerializeField] float speed;
-    [SerializeField] float lifeDuration;
-    [SerializeField] LayerMask detectionLayer;
-    [SerializeField] float detectionRadius;
-
-    bool hasShot;
-    float remainingLife;
-    int direction;
-    int damage;
-
-    /// <summary>Lanza el proyectil hacia la derecha (1) o hacia la izquierda (-1).</summary>
-    public void Shoot(int direction, int damage)
+    /// <summary>Proyectil enemigo: avanza en línea recta y daña al primero que toca.</summary>
+    public class ProjectileEnemy : MonoBehaviour
     {
-        hasShot = true;
-        remainingLife = lifeDuration;
-        this.direction = direction;
-        this.damage = damage;
-    }
+        [SerializeField] float speed = 12f;
+        [SerializeField] float lifeDuration = 2f;
+        [SerializeField] LayerMask detectionLayer;
+        [SerializeField] float detectionRadius = 0.1f;
 
-    void Update()
-    {
-        if (!hasShot)
-            return;
+        bool launched;
+        float remainingLife;
+        int direction;
+        int damage;
 
-        transform.position += Vector3.right * (speed * direction * Time.deltaTime);
+        /// <summary>Lanza el proyectil hacia la derecha (1) o hacia la izquierda (-1).</summary>
+        public void Shoot(int direction, int damage)
+        {
+            launched = true;
+            remainingLife = lifeDuration;
+            this.direction = direction;
+            this.damage = damage;
+        }
 
-        if (TryDamage())
-            return;
+        void Update()
+        {
+            if (!launched)
+                return;
 
-        remainingLife -= Time.deltaTime;
-        if (remainingLife <= 0f)
+            transform.position += Vector3.right * (speed * direction * Time.deltaTime);
+
+            if (TryDamage())
+                return;
+
+            remainingLife -= Time.deltaTime;
+            if (remainingLife <= 0f)
+                Die();
+        }
+
+        /// <summary>Daña al objetivo que tenga delante. Devuelve true si ha impactado.</summary>
+        bool TryDamage()
+        {
+            var hit = Physics2D.OverlapCircle(transform.position, detectionRadius, detectionLayer);
+            if (!hit)
+                return false;
+
+            if (hit.TryGetComponent<PlayerController>(out var player))
+                player.GetHit(damage);
+
             Die();
-    }
+            return true;
+        }
 
-    /// <summary>Dana al objetivo que tenga delante. Devuelve true si ha impactado.</summary>
-    bool TryDamage()
-    {
-        var hit = Physics2D.OverlapCircle(transform.position, detectionRadius, detectionLayer);
-        if (!hit)
-            return false;
+        void Die()
+        {
+            Destroy(gameObject);
+        }
 
-        if (hit.TryGetComponent<PlayerController>(out var player))
-            player.GetHit(damage);
-
-        Die();
-        return true;
-    }
-
-    void Die()
-    {
-        Destroy(gameObject);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        }
     }
 }

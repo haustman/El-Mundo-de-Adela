@@ -313,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: JUGAR
+  m_text: NIVELES
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -1104,15 +1104,19 @@ MonoBehaviour:
   logoFadeDuration: 1.2
   buttonFadeDuration: 0.6
   buttonDelay: 0.5
+  buttonDelayStep: 0.3
   pulseMinAlpha: 0.65
   pulseMaxAlpha: 1
   pulseSpeed: 0.6
   hoverScale: 1.12
   scaleSpeed: 8
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.6}
   shadowOffsetHover: {x: 3, y: -3}
   shadowOffsetNormal: {x: 0, y: 0}
   shadowSpeed: 10
+  transitionColor: {r: 0, g: 0, b: 0, a: 1}
   transitionDuration: 0.8
+  transitionHoldTime: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,109 +1,130 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Enemigo a distancia: patrulla, dispara durante el recorrido y se gira al cerrar la vuelta.
-/// </summary>
-public class EnemyShooter : Damageable
+namespace ElMundoDeAdela
 {
-    [SerializeField] GameObject shape;
-    [SerializeField] ProjectileEnemy projectilePrefab;
-    [SerializeField] bool canPatrol;
-    [SerializeField] List<PatrolMovement> patrolPositions;
-    [SerializeField] LayerMask characterLayer;
-    [SerializeField] float characterDetectionRange;
-    [SerializeField] int damage;
-    [SerializeField] EnemyShooterHUDController HUD;
-    [SerializeField] int shootNum;
-
-    PatrolRoute patrolRoute;
-    bool isFacingRight = true;
-    bool hasShotThisLeg;
-
-    /// <summary>La ruta se construye la primera vez que se usa, sin depender del orden de Start.</summary>
-    PatrolRoute Route => patrolRoute ??= new PatrolRoute(patrolPositions);
-
-    protected override void SetupHUD()
+    /// <summary>
+    /// Enemigo a distancia: patrulla, dispara durante el recorrido y se gira al cerrar la vuelta.
+    /// </summary>
+    public class EnemyShooter : Damageable
     {
-        if (HUD)
-            HUD.Setup(this);
-    }
+        [Header("Visual")]
+        [Tooltip("Sprite que se espeja al cambiar de sentido.")]
+        [SerializeField] GameObject shape;
 
-    protected override void RefreshHUD()
-    {
-        if (HUD)
-            HUD.Repaint(this);
-    }
+        [Header("Patrulla")]
+        [SerializeField] bool canPatrol;
+        [SerializeField] List<PatrolMovement> patrolPositions = new List<PatrolMovement>();
 
-    void Update()
-    {
-        EnsureReady();
-        Patrol();
-        DamagePlayerInRange();
-    }
+        [Header("Disparo")]
+        [SerializeField] ProjectileEnemy projectilePrefab;
+        [Tooltip("Número de disparos repartidos a lo largo de cada tramo.")]
+        [SerializeField] int shootNum = 3;
 
-    void Patrol()
-    {
-        if (!canPatrol || !Route.IsValid)
-            return;
+        [Header("Detección")]
+        [SerializeField] LayerMask characterLayer;
+        [SerializeField] float characterDetectionRange = 1f;
 
-        transform.position = Route.Tick(Time.deltaTime);
+        [Header("Combate")]
+        [SerializeField] int damage = 1;
 
-        ShootOnSchedule();
+        [Header("Interfaz")]
+        [SerializeField] EnemyShooterHUDController HUD;
 
-        if (!Route.HasArrived(transform.position))
-            return;
+        PatrolRoute route;
+        bool isFacingRight = true;
+        bool hasShotThisLeg;
 
-        hasShotThisLeg = false;
+        // La ruta se construye la primera vez que se usa, sin depender del orden de Start.
+        PatrolRoute Route => route ??= new PatrolRoute(patrolPositions);
 
-        // Con un solo punto no hay vuelta que cerrar: si no se comprueba,
-        // el enemigo dispararia y se giraria una vez por frame.
-        if (Route.Count > 1 && Route.Next())
+        protected override void SetupHUD()
         {
-            Shoot();
-            Flip();
+            if (HUD)
+                HUD.Setup(this);
         }
-    }
 
-    /// <summary>Un disparo por tramo, a la fraccion del recorrido que marca shootNum.</summary>
-    void ShootOnSchedule()
-    {
-        if (hasShotThisLeg || shootNum <= 0)
-            return;
+        protected override void RefreshHUD()
+        {
+            if (HUD)
+                HUD.Repaint(this);
+        }
 
-        if (Route.Progress < 1f / shootNum)
-            return;
+        void Update()
+        {
+            EnsureReady();
+            Patrol();
+            DamagePlayerInRange();
+        }
 
-        hasShotThisLeg = true;
-        Shoot();
-    }
+        void Patrol()
+        {
+            if (!canPatrol || !Route.IsValid)
+                return;
 
-    void Shoot()
-    {
-        var projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-        projectile.Shoot(isFacingRight ? 1 : -1, damage);
-    }
+            transform.position = Route.Tick(Time.deltaTime);
 
-    /// <summary>Espeja el sprite y cambia el sentido del disparo.</summary>
-    void Flip()
-    {
-        if (!shape) return;
-        var scale = shape.transform.localScale;
-        scale.x *= -1f;
-        shape.transform.localScale = scale;
-        isFacingRight = !isFacingRight;
-    }
+            ShootOnSchedule();
 
-    void DamagePlayerInRange()
-    {
-        var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
-        if (hit && hit.TryGetComponent<PlayerController>(out var player))
-            player.GetHit(damage);
-    }
+            if (!Route.HasArrived(transform.position))
+                return;
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawWireSphere(transform.position, characterDetectionRange);
+            hasShotThisLeg = false;
+
+            // Con un solo punto no hay vuelta que cerrar: sin esta comprobación el
+            // enemigo dispararía y se giraría una vez por frame.
+            if (Route.Count > 1 && Route.Next())
+            {
+                Shoot();
+                Flip();
+            }
+        }
+
+        /// <summary>Un disparo por tramo, en la fracción del recorrido que marca shootNum.</summary>
+        void ShootOnSchedule()
+        {
+            if (hasShotThisLeg || shootNum <= 0)
+                return;
+
+            if (Route.Progress < 1f / shootNum)
+                return;
+
+            hasShotThisLeg = true;
+            Shoot();
+        }
+
+        void Shoot()
+        {
+            if (!projectilePrefab)
+                return;
+
+            var projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            projectile.Shoot(isFacingRight ? 1 : -1, damage);
+        }
+
+        /// <summary>Espeja el sprite y cambia el sentido del disparo.</summary>
+        void Flip()
+        {
+            if (!shape)
+                return;
+
+            var scale = shape.transform.localScale;
+            scale.x *= -1f;
+            shape.transform.localScale = scale;
+            isFacingRight = !isFacingRight;
+        }
+
+        void DamagePlayerInRange()
+        {
+            var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
+            if (hit && hit.TryGetComponent<PlayerController>(out var player))
+                player.GetHit(damage);
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.black;
+            Gizmos.DrawWireSphere(transform.position, characterDetectionRange);
+        }
     }
 }

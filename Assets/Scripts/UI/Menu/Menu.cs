@@ -1,34 +1,36 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Botones del menu principal: Jugar (transicion o carga directa)
-/// y Quit (salir del juego/editor).
-/// </summary>
-public class Menu : MonoBehaviour
+namespace ElMundoDeAdela
 {
-    [SerializeField] string gameSceneName = "Niveles";
-
-    MenuEffects effects;
-
-    void Start()
+    /// <summary>
+    /// Botones del menú principal: Jugar (con transición o carga directa) y Salir.
+    /// </summary>
+    public class Menu : MonoBehaviour
     {
-        effects = FindObjectOfType<MenuEffects>();
-    }
+        [SerializeField] string gameSceneName = "Niveles";
 
-    public void Play()
-    {
-        if (effects)
-            effects.StartTransition(gameSceneName);
-        else
-            SceneManager.LoadScene(gameSceneName);
-    }
+        MenuEffects effects;
 
-    public void Quit()
-    {
-        Application.Quit();
+        void Start()
+        {
+            effects = FindObjectOfType<MenuEffects>();
+        }
+
+        public void Play()
+        {
+            if (effects)
+                effects.StartTransition(gameSceneName);
+            else
+                SceneManager.LoadScene(gameSceneName);
+        }
+
+        public void Quit()
+        {
+            Application.Quit();
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 #endif
+        }
     }
 }

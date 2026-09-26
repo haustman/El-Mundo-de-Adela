@@ -1,56 +1,67 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-/// <summary>
-/// Base para todo lo que tiene vida y puede recibir dano.
-/// Los nombres de los campos (Health, MaxHealth) se mantienen porque Unity los guarda en la escena.
-/// </summary>
-public abstract class Damageable : MonoBehaviour
+namespace ElMundoDeAdela
 {
-    public int MaxHealth;
-    public int Health;
-
-    bool isReady;
-    bool isDead;
-
     /// <summary>
-    /// Prepara la vida y la barra. Se llama solo, la primera vez que hace falta:
-    /// asi no depende de Start y un recargue de ensamblado (editar un script en Play)
-    /// no deja el componente a medio inicializar.
+    /// Base de todo lo que tiene vida y puede recibir daño.
+    /// La vida máxima se toma de la vida inicial la primera vez que hace falta.
     /// </summary>
-    protected void EnsureReady()
+    public abstract class Damageable : MonoBehaviour
     {
-        if (isReady)
-            return;
+        [Header("Vida")]
+        [SerializeField, FormerlySerializedAs("Health")] int health = 3;
+        [Tooltip("Destruye el objeto cuando se queda sin vida.")]
+        [SerializeField] bool destroyOnDeath = true;
 
-        isReady = true;
-        MaxHealth = Health;
-        SetupHUD();
-    }
+        bool initialized;
+        bool dead;
 
-    /// <summary>Aplica dano. Los golpes sobre algo ya muerto se ignoran.</summary>
-    public void GetHit(int amount)
-    {
-        EnsureReady();
+        public int Health => health;
 
-        if (isDead)
-            return;
+        public int MaxHealth { get; private set; }
 
-        Health = Mathf.Max(Health - amount, 0);
-        RefreshHUD();
+        public bool IsDead => dead;
 
-        if (Health <= 0)
-            Die();
-    }
+        /// <summary>
+        /// Fija la vida máxima y prepara el HUD. Se llama sola la primera vez que
+        /// hace falta, para no depender del orden de los Start ni de un recargue
+        /// de ensamblado (editar un script en Play deja el componente a medias).
+        /// </summary>
+        protected void EnsureReady()
+        {
+            if (initialized)
+                return;
 
-    /// <summary>Prepara la barra de vida. Lo llama EnsureReady una sola vez.</summary>
-    protected virtual void SetupHUD() { }
+            initialized = true;
+            MaxHealth = health;
+            SetupHUD();
+        }
 
-    /// <summary>Refresca la barra de vida tras un cambio de vida.</summary>
-    protected virtual void RefreshHUD() { }
+        public void GetHit(int amount)
+        {
+            EnsureReady();
 
-    protected virtual void Die()
-    {
-        isDead = true;
-        Destroy(gameObject);
+            if (dead || amount <= 0)
+                return;
+
+            health = Mathf.Max(health - amount, 0);
+            RefreshHUD();
+
+            if (health <= 0)
+                Die();
+        }
+
+        protected virtual void SetupHUD() { }
+
+        protected virtual void RefreshHUD() { }
+
+        protected virtual void Die()
+        {
+            dead = true;
+
+            if (destroyOnDeath)
+                Destroy(gameObject);
+        }
     }
 }

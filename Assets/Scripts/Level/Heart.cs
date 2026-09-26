@@ -1,33 +1,36 @@
 using UnityEngine;
 
-/// <summary>Corazon recogible: cura al jugador y desaparece.</summary>
-public class Heart : MonoBehaviour
+namespace ElMundoDeAdela
 {
-    [SerializeField] LayerMask characterLayer;
-    [SerializeField] float characterDetectionRange;
-    [SerializeField] float rotationSpeed = 200f;
-
-    void Update()
+    /// <summary>Corazón recogible: cura al jugador y desaparece.</summary>
+    public class Heart : MonoBehaviour
     {
-        TryPickUp();
+        [SerializeField] LayerMask characterLayer;
+        [SerializeField] float characterDetectionRange = 0.5f;
+        [SerializeField] int healAmount = 1;
+        [SerializeField] float rotationSpeed = 200f;
 
-        // Giro sobre el eje Y: el corazon se estrecha y se ensancha como una moneda
-        // vista de frente, que es el clasico de los recogibles. Sobre Z pareceria
-        // una rueda rodando.
-        transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-    }
+        void Update()
+        {
+            TryPickUp();
 
-    void TryPickUp()
-    {
-        var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
-        if (!hit || !hit.TryGetComponent<PlayerController>(out var player))
-            return;
+            // Giramos sobre el eje Y: el corazón se estrecha y se ensancha como una
+            // moneda vista de frente. Sobre Z parecería una rueda rodando.
+            transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
+        }
 
-        // Si Adela ya esta al maximo de vida, el corazon se queda donde esta:
-        // no se gasta para no curar nada.
-        if (!player.Heal(1))
-            return;
+        void TryPickUp()
+        {
+            var hit = Physics2D.OverlapCircle(transform.position, characterDetectionRange, characterLayer);
+            if (!hit || !hit.TryGetComponent<PlayerController>(out var player))
+                return;
 
-        Destroy(gameObject);
+            // Si Adela ya está al máximo de vida, el corazón se queda donde está:
+            // no se gasta para no curar nada.
+            if (!player.Heal(healAmount))
+                return;
+
+            Destroy(gameObject);
+        }
     }
 }
