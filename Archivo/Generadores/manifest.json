@@ -1,0 +1,132 @@
+{
+  "Idle": [
+    {
+      "name": "Idle_0",
+      "guid": "01985a12499f19b680e277f4b46b68b0",
+      "file": "Idle/Idle_0.png"
+    },
+    {
+      "name": "Idle_1",
+      "guid": "0da3970f5b06f3646ab4c16bad113f20",
+      "file": "Idle/Idle_1.png"
+    },
+    {
+      "name": "Idle_2",
+      "guid": "efd5902066d74936dc800e3f34878be9",
+      "file": "Idle/Idle_2.png"
+    },
+    {
+      "name": "Idle_3",
+      "guid": "537864d45c2f81bf4c8a60edbdde0658",
+      "file": "Idle/Idle_3.png"
+    }
+  ],
+  "Walk": [
+    {
+      "name": "Walk_0",
+      "guid": "71486edb470208617488d06cbcd22496",
+      "file": "Walk/Walk_0.png"
+    },
+    {
+      "name": "Walk_1",
+      "guid": "f51da0b4c4baf616d123661c89d743ca",
+      "file": "Walk/Walk_1.png"
+    },
+    {
+      "name": "Walk_2",
+      "guid": "e80dcc6b22b33c29f88f50499ab60cf6",
+      "file": "Walk/Walk_2.png"
+    },
+    {
+      "name": "Walk_3",
+      "guid": "49c6e37734193055cacb0d61016177f3",
+      "file": "Walk/Walk_3.png"
+    }
+  ],
+  "Run": [
+    {
+      "name": "Run_0",
+      "guid": "acbd79c667371da53e7a447c2b2e7cb6",
+      "file": "Run/Run_0.png"
+    },
+    {
+      "name": "Run_1",
+      "guid": "6776671035ae854de1df047c1f7d5481",
+      "file": "Run/Run_1.png"
+    },
+    {
+      "name": "Run_2",
+      "guid": "e07fa0ee7dbd34c3e8d28868dcc7a52f",
+      "file": "Run/Run_2.png"
+    },
+    {
+      "name": "Run_3",
+      "guid": "9a8e784983eaadc1817c272eab16b998",
+      "file": "Run/Run_3.png"
+    }
+  ],
+  "Jump": [
+    {
+      "name": "Jump_0",
+      "guid": "6fc2ae8d7eac665cafd467c74946a913",
+      "file": "Jump/Jump_0.png"
+    },
+    {
+      "name": "Jump_1",
+      "guid": "0e0049cb8875a3e26351b08748a72c20",
+      "file": "Jump/Jump_1.png"
+    },
+    {
+      "name": "Jump_2",
+      "guid": "3ab51dd2afec92f6285dcd22995bbab9",
+      "file": "Jump/Jump_2.png"
+    },
+    {
+      "name": "Jump_3",
+      "guid": "f2005597ca9af42d7f18461bb3bc5886",
+      "file": "Jump/Jump_3.png"
+    },
+    {
+      "name": "Jump_4",
+      "guid": "385942d0ef37768f24c72af7e1c0e1af",
+      "file": "Jump/Jump_4.png"
+    },
+    {
+      "name": "Jump_5",
+      "guid": "6fcf9dcc06f551c4739044f50b776777",
+      "file": "Jump/Jump_5.png"
+    },
+    {
+      "name": "Jump_6",
+      "guid": "eb614b343689d7e29ee95f285a54df9a",
+      "file": "Jump/Jump_6.png"
+    }
+  ],
+  "Attack": [
+    {
+      "name": "Attack_0",
+      "guid": "73d34e0285eec9d0272ba227e9c8a662",
+      "file": "Attack/Attack_0.png"
+    },
+    {
+      "name": "Attack_1",
+      "guid": "4db6dad5bd4e9c3f64f6c61579b6157b",
+      "file": "Attack/Attack_1.png"
+    },
+    {
+      "name": "Attack_2",
+      "guid": "6bb7ab7ac0a5125b5711e1698bbdf630",
+      "file": "Attack/Attack_2.png"
+    },
+    {
+      "name": "Attack_3",
+      "guid": "51b3b474df4184e3e3067310ecd4aaa7",
+      "file": "Attack/Attack_3.png"
+    },
+    {
+      "name": "Attack_4",
+      "guid": "c4347ebb887f857505a9df02c02f0465",
+      "file": "Attack/Attack_4.png"
+    }
+  ]
+}
