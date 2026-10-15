@@ -81,6 +81,11 @@ namespace ElMundoDeAdela
         {
             rb = GetComponent<Rigidbody2D>();
 
+            // Evita que Adela traspase los bloques al caer rápido (colisión continua)
+            // y suaviza el movimiento visualmente.
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+
             if (!shape)
             {
                 Debug.LogError($"{nameof(PlayerController)}: falta asignar 'shape' en el Inspector.", this);
